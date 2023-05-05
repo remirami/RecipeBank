@@ -1,0 +1,162 @@
+{
+    "welcome": "Tervetuloa Reseptipankkiin!",
+    "changeLanguage": "Vaihda kieli",
+    "loading": "Ladataan...",
+    "recipe_not_found": "Reseptiä ei löytynyt",
+    "ingredients": "Ainekset",
+    "instructions": "Ohjeet",
+    "edit": "Muokkaa",
+    "delete_recipe": "Poista resepti",
+    "back_to_recipes": "Takaisin resepteihin",
+    "logged_in_successfully": "Kirjautuminen onnistui",
+    "logged_out": "Kirjauduit ulos",
+    "addRecipe": {
+      "title": "Lisää resepti",
+      "name": "Nimi",
+      "description": "Kuvaus",
+      "category": "Kategoria",
+      "options": {
+        "selectCategory": "Valitse kategoria",
+        "vegetable": "Kasvis",
+        "meat": "Liha",
+        "dessert": "Jälkiruoka",
+        "fish": "Kala",
+        "dairy": "Maito",
+        "poultry": "Siipikarja",
+        "grains": "Viljat",
+        "legumes": "Palkokasvit",
+        "fruits": "Hedelmät",
+        "nuts": "Pähkinät",
+        "beverages": "Juomat",
+        "soups": "Keitot",
+        "salads": "Salaatit",
+        "breads": "Leivät",
+        "snacks": "Välipalat",
+        "appetizers": "Alkupalat",
+        "sauces": "Kastikkeet",
+        "spices": "Mausteet",
+        "seafood": "Äyriäiset",
+        "eggs": "Munat",
+        "pasta": "Pasta",
+        "rice": "Riisi",
+        "pizza": "Pizza",
+        "sandwiches": "Voileivät",
+        "stews": "Patat",
+        "curries": "Curryt",
+        "vegan": "Vegaani",
+        "vegetarian": "Kasvissyöjä",
+        "glutenFree": "Gluteeniton",
+        "dairyFree": "Maidoton",
+        "paleo": "Paleo",
+        "keto": "Keto",
+        "lowCarb": "Vähähiilihydraattinen",
+        "lowFat": "Vähärasvainen",
+        "lowSodium": "Vähäsuolainen",
+        "sugarFree": "Sokeriton"
+      },
+      "ingredients": {
+        "title": "Ainekset",
+        "name": "Nimi",
+        "amount": "Määrä",
+        "remove": "Poista",
+        "addIngredient": "Lisää ainesosa"
+      },
+      "instructions": {
+        "title": "Ohjeet",
+        "instruction": "Ohje",
+        "remove": "Poista",
+        "addInstruction": "Lisää ohje"
+      },
+      "addRecipeButton": "Lisää resepti",
+      "submit": "Lähetä",
+      "errors": {
+        "nameRequired": "Nimikenttä vaaditaan!",
+        "descriptionRequired": "Anna reseptille kuvaus",
+        "categoryRequired": "Aseta reseptille kategoria",
+        "ingredientsRequired": "Aseta vähintään yksi ainesosa",
+        "instructionsRequired": "Lisää ohjeet"
+
+      }
+  
+  
+    },
+    "login": {
+        "title": "Kirjaudu sisään",
+        "username": "Käyttäjänimi",
+        "password": "Salasana",
+        "login_button": "Kirjaudu sisään",
+        "reset_password": "Unohtuiko salasana?",
+        "errors": {
+            "missingToken": "Token puuttuu vastauksesta.",
+            "invalidCredentials": "Väärä käyttäjänimi tai salasana."
+      
+        }
+      },
+      "register": {
+        "title": "Rekisteröidy",
+        "username": "Käyttäjätunnus",
+        "email": "Sähköposti",
+        "password": "Salasana",
+        "confirm_password": "Vahvista salasana",
+        "register_button": "Rekisteröidy",
+        "errors": {
+            "passwordMismatch": "Salasanat eivät täsmää, yritä uudelleen.",
+            "registrationFailed": "Rekisteröinti epäonnistui. Yritä uudelleen."
+          }
+      
+       },
+       "navbar": {
+        "home": "Etusivu",
+        "recipes": "Reseptit",
+        "random_recipe": "Satunnainen resepti",
+        "search": "Haku",
+        "add_recipe": "Lisää resepti",
+        "login": "Kirjaudu sisään",
+        "register": "Rekisteröidy",
+        "logout": "Kirjaudu ulos",
+        "profile": "Profiili" 
+
+      }
+    ,  "randomRecipe": {
+        "title": "Satunnainen resepti",
+        "ingredients": "Ainekset:",
+        "instructions": "Valmistusohjeet:"
+      },
+      "randomRecipeButton": {
+        "text": "Satunnainen resepti"
+      },
+      "search": {
+        "search_recipes": "Etsi reseptejä",
+        "search_placeholder": "Etsi nimen tai ainesosan perusteella",
+        "search_button": "Haku",
+        "no_results": "Ei hakutuloksia. Yritä uudestaan."
+      },  "recipeList": {
+        "title": "Reseptit",
+        "searchPlaceholder": "Etsi reseptejä nimellä, kategorialla tai ainesosilla"
+
+      },
+      "profile": {
+        "title": "Profiili",
+        "username": "Käyttäjätunnus",
+        "email": "Sähköposti",
+        "changePassword": "Vaihda salasana",
+        "currentPassword": "Nykyinen salasana",
+        "newPassword": "Uusi salasana",
+        "confirmNewPassword": "Vahvista uusi salasana",
+        "noRecipes": "Reseptejä ei löytynyt.",
+        "loadingUserData": "Ladataan käyttäjätietoja...",
+        "yourRecipes": "Reseptisi"
+    
+      },  "recipeCard": {
+        "ingredients": "Ainekset",
+        "instructions": "Ohjeet",
+        "made_by": "Tehnyt"
+
+      }
+    
+    
+    
+    
+    
+    
+  }

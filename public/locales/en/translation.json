@@ -1,0 +1,167 @@
+{
+  "welcome": "Welcome to Recipebank!",
+  "changeLanguage": "Change language",
+  "loading": "Loading...",
+  "recipe_not_found": "Recipe not found",
+  "ingredients": "Ingredients",
+  "instructions": "Instructions",
+  "edit": "Edit",
+  "delete_recipe": "Delete Recipe",
+  "back_to_recipes": "Back to recipes",
+  "logged_in_successfully": "Logged in succesfully",
+  "logged_out": "Logged out",
+  "addRecipe": {
+    "title": "Add recipe",
+    "name": "Name",
+    "description": "Description",
+    "category": "Category",
+    "options": {
+      "selectCategory": "Select category",
+      "vegetable": "Vegetable",
+      "meat": "Meat",
+      "dessert": "Dessert",
+      "fish": "Fish",
+      "dairy": "Dairy",
+      "poultry": "Poultry",
+      "grains": "Grains",
+      "legumes": "Legumes",
+      "fruits": "Fruits",
+      "nuts": "Nuts",
+      "beverages": "Beverages",
+      "soups": "Soups",
+      "salads": "Salads",
+      "breads": "Breads",
+      "snacks": "Snacks",
+      "appetizers": "Appetizers",
+      "sauces": "Sauces",
+      "spices": "Spices",
+      "seafood": "Seafood",
+      "eggs": "Eggs",
+      "pasta": "Pasta",
+      "rice": "Rice",
+      "pizza": "Pizza",
+      "sandwiches": "Sandwiches",
+      "stews": "Stews",
+      "curries": "Curries",
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarian",
+      "glutenFree": "Gluten-free",
+      "dairyFree": "Dairy-free",
+      "paleo": "Paleo",
+      "keto": "Keto",
+      "lowCarb": "Low-carb",
+      "lowFat": "Low-fat",
+      "lowSodium": "Low-sodium",
+      "sugarFree": "Sugar-free"
+    },
+    "ingredients": {
+      "title": "Ingredients",
+      "name": "Name",
+      "amount": "Amount",
+      "remove": "Remove",
+      "addIngredient": "Add ingredient"
+    },
+    "instructions": {
+      "title": "Instructions",
+      "instruction": "Instruction",
+      "remove": "Remove",
+      "addInstruction": "Add instruction"
+    },
+    "addRecipeButton": "Add recipe",
+    "submit": "Submit",
+    "errors": {
+      "nameRequired": "Name is required.",
+      "descriptionRequired": "Description is required.",
+      "categoryRequired": "Category is required.",
+      "ingredientsRequired": "Insert atleast one ingredient",
+      "instructionsRequired": "Add instructions"
+
+    }
+  },
+  "login": {
+    "title": "Log in",
+    "username": "Username",
+    "password": "Password",
+    "login_button": "Log in",
+    "reset_password": "Forgot Password?",
+
+    "errors":{
+      "missingToken": "Token is missing in the response.",
+      "invalidCredentials": "Invalid username or password."
+
+    }
+  },
+  "register": {
+    "title": "Register",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "register_button": "Register",
+    "errors": {
+      "passwordMismatch": "Passwords do not match. Please try again.",
+      "registrationFailed": "Registration failed. Please try again."
+    }
+  }
+,
+  "navbar": {
+    "home": "Home",
+    "recipes": "Recipes",
+    "random_recipe": "Random recipe",
+    "search": "Search",
+    "add_recipe": "Add Recipe",
+    "login": "Log in",
+    "register": "Sign up",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "randomRecipe": {
+    "title": "Random Recipe",
+    "ingredients": "Ingredients:",
+    "instructions": "Instructions:"
+  },
+  "randomRecipeButton": {
+    "text": "Random recipe"
+  },
+  "search": {
+    "search_recipes": "Search Recipes",
+    "search_placeholder": "Search by name or ingredient",
+    "search_button": "Search",
+    "no_results": "Didn't find any recipes with those terms, try again."
+  },
+  "recipeList": {
+    "title": "Recipes",
+    "searchPlaceholder": "Search recipes by name, category or ingredients"
+
+  },"reset_password": {
+    "title": "Reset Password",
+    "email": "Email",
+    "submit_button": "Reset Password",
+    "success_message": "A password reset link has been sent to your email.",
+    "error_message": "Failed to send password reset email. Please try again."
+  },  "profile": {
+    "title": "Profile",
+    "username": "Username",
+    "email": "Email",
+    "changePassword": "Change Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "noRecipes": "No recipes found.",
+    "loadingUserData": "Loading user data...",
+    "yourRecipes": "Your Recipes"
+
+  },  "recipeCard": {
+    "ingredients": "Ingredients",
+    "instructions": "Instructions",
+    "made_by": "Made by"
+  }
+
+
+  
+
+}
+
+
+
+

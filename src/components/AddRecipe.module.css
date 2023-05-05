@@ -1,0 +1,95 @@
+.error {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 0.25em;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Updated this property */
+  min-height: 100vh;
+  padding: 1rem;
+  padding-top: 100px;
+}
+
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+input {
+  width: 100%;
+  max-width: 600px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.submitButton {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.formElement {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.formElement.textarea {
+  height: 100px;
+  width: 100%;
+}
+
+.button {
+  width: auto;
+  padding: 0.5rem 1rem;
+}
+
+.labelContainer {
+  margin-bottom: 15px;
+}
+
+.categorySelect {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.addButton, .removeButton {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+}
+

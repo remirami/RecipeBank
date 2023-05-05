@@ -1,0 +1,12 @@
+.recipeCard {
+    border: 1px solid rgb(204, 137, 11);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 15px 50px;
+  }
+  @media screen and (min-width: 600px) {
+    .recipeCard {
+      font-size: 0.9em;
+    }
+  }
+  

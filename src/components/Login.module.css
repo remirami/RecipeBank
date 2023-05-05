@@ -1,0 +1,66 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 150px;
+  padding: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.loginButton {
+  background-color: #ffffff;
+  border: 2px solid;
+  color: rgb(247, 99, 0);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+
+}
+.loginButton:hover{
+  font-size: 18px;
+  transition: 0.5s;
+  background-color: beige;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  transition: font-size 0.5s, background-color 0.5s, box-shadow 0.5s;
+
+}.loginButton:before {
+  content: ">>";
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+
+  transition: all 0.5s;
+}
+
+.loginButton:hover:before {
+  right: 10px;
+  opacity: 1;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
