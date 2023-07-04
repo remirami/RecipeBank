@@ -5,7 +5,10 @@ import {
   changeUserPassword,
 } from "../services/api";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+
 import styles from "./Profile.module.css";
+
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [recipes, setRecipes] = useState([]);
@@ -68,29 +71,30 @@ const Profile = () => {
       {user ? (
         <div className={styles.userDetails}>
           <h2>{user.name}</h2>
-          <div className={styles.userinfo}>
+          <div className={styles.userInfo}>
             <p>
-              {t("profile.username")}: {user.username}
+              <span className={styles.infoLabel}>{t("profile.username")}:</span>{" "}
+              {user.username}
             </p>
+
             <p>
-              {t("profile.email")}: {user.email}
+              <span className={styles.infoLabel}>{t("profile.email")}:</span>{" "}
+              {user.email}
             </p>
+            <button
+              onClick={toggleChangePasswordForm}
+              className={styles.changePasswordButton}
+            >
+              {t("profile.changePassword")}
+            </button>
           </div>
         </div>
       ) : (
         <p>{t("profile.loadingUserData")}</p>
       )}
-
-      <h2>{t("profile.yourRecipes")}</h2>
-      <button
-        onClick={toggleChangePasswordForm}
-        className={styles.changePasswordButton}
-      >
-        {t("profile.changePassword")}
-      </button>
       {showChangePasswordForm && (
         <form onSubmit={handleChangePassword}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div className={styles.formLabel}>
             <input
               type="password"
               name="currentPassword"
@@ -111,14 +115,19 @@ const Profile = () => {
             />
           </div>
           <br />
-          <button type="submit">{t("profile.changePassword")}</button>
+          <button type="submit" className={styles.submitButton}>
+            {t("profile.submitPassword")}
+          </button>
         </form>
       )}
+      <h2>{t("profile.yourRecipes")}</h2>
 
       {recipes.length > 0 ? (
         <ul>
           {recipes.map((recipe) => (
-            <li key={recipe._id}>{recipe.name}</li>
+            <li key={recipe._id}>
+              <Link to={`/recipes/${recipe._id}`}>{recipe.name}</Link>
+            </li>
           ))}
         </ul>
       ) : (

@@ -11,10 +11,23 @@ const Welcome = () => {
   return (
     <div className={styles.container}>
       <div className={styles.innerContainer}>
-        <h1>{t("welcome")}</h1>
-        <div className={styles.languageButtons}>
-          <button onClick={() => changeLanguage("en")}>English</button>
-          <button onClick={() => changeLanguage("fi")}>Suomi</button>
+        <h1>{t("welcomeTexts.welcome")}</h1>
+        <div className={styles.infoBox}>
+          <p>{t("welcomeTexts.longText")}</p>
+        </div>
+        <div>
+          <button
+            className={styles.button}
+            onClick={() => changeLanguage("en")}
+          >
+            English
+          </button>
+          <button
+            className={styles.button}
+            onClick={() => changeLanguage("fi")}
+          >
+            Suomi
+          </button>
         </div>
       </div>
     </div>

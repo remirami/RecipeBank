@@ -1,69 +1,83 @@
-.error {
-  color: red;
-  font-size: 1.0em;
-  margin-top: 0.25em;
-}
-
-.success {
-  color: green;
-  font-weight: bold;
-  font-size: 1.0em;
-
-}
-
-.container {
-  display: flex;
+.container{
+display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start; 
   min-height: 100vh;
   padding: 1rem;
-  padding-top: 100px;
+  padding-top: 150px;
   font-family: 'Quicksand';
 }
-
-
 .formContainer {
   position: relative;
   display: flex;
   flex-direction: column;
+  background-image: url("C:\recipebank\src\assets\potato.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
   gap: 1rem;
   width: 100%;
   max-width: 600px;
   border-radius: 15px;
   padding: 15px;
   border: 1px solid #000000; 
-  font-family: 'Quicksand';
-
 }
 
-.formContainer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-image: url("C:\recipebank\src\assets\dill.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.4;
-  z-index: -1;
+.formElement {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  gap: 20px;
 }
 
+.inputField {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
 
-input {
+.removeButton {
+  margin-top: 10px;
+  color: white;
+  background-color: red;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  border: 2px solid #000000;
+
+}
+.removeButton:hover{
+  background-color: #4b2903;
+  color: #ffffff
+
+}
+.addButton {
+  margin-top: 10px;
+  color: white;
+  background-color: green;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  border: 2px solid #000000;
+
+}
+.addButton:hover{
+  background-color: #4b2903;
+  color: #ffffff
+}
+.categorySelect {
+  display: block;
   width: 100%;
-  max-width: 600px;
   padding: 0.5rem;
   border: 1px solid #000000;
   border-radius: 4px;
   box-sizing: border-box;
   font-family: 'Quicksand';
+  border: 2px solid #000000;
 
 }
-
 .submitButton {
   background-color: #ffffff;
   border: 2px solid #000000;
@@ -80,48 +94,10 @@ input {
 }
 .submitButton:hover{
   background-color: #4b2903;
-  color: #ffffff;
-}
-.formElement {
-  display: block;
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-family: 'Quicksand';
+  color: #ffffff
 
 }
-
-.formElement.textarea {
-  height:1rem;
-  width: 97%;
-  resize: none;
-  border-radius: 4px;
-}
-
-.button {
-  width: auto;
-  padding: 0.5rem 1rem;
-  font-family: 'Quicksand';
-
-}
-
-.labelContainer {
-  margin-bottom: 15px;
-}
-
-.categorySelect {
-  display: block;
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #000000;
-  border-radius: 4px;
-  box-sizing: border-box;
-  font-family: 'Quicksand';
-  border: 2px solid #000000;
-
-
-}
-.addButton, .removeButton {
+.addButton {
   background-color: rgb(255, 255, 255);
   border: 2px solid #000000;
   color: rgb(0, 0, 0);
@@ -133,30 +109,43 @@ input {
   cursor: pointer;
   border-radius: 4px;
   padding: 0.5rem 1rem;
+  font-family: 'Quicksand';
 }
-.addButton:hover{
+.removeButton {
+  background-color: rgb(255, 255, 255);
+  border: 2px solid #000000;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-family: 'Quicksand';
+
+}
+.cancelButton {
+  background-color: rgb(255, 255, 255);
+  border: 2px solid #000000;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-family: 'Quicksand';
+
+}
+.cancelButton:hover{
   background-color: #4b2903;
   color: #ffffff
-}
-.removeButton:hover{
-  background-color: #4b2903;
-  color: #ffffff;
-}
-.returnButton{
-  background-color: rgb(255, 255, 255);
-  border: 2px solid #000000;
-  color: rgb(0, 0, 0);
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1rem;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
-  font-family: 'Quicksand';
 
 }
-.returnButton:hover{
-  background-color: #4b2903;
-  color: #ffffff;}
+.error{
+  color:red;
+}

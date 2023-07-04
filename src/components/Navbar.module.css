@@ -12,7 +12,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000; /* To ensure the navbar is above other elements */
+  z-index: 1000; 
 
 
 }
@@ -39,7 +39,6 @@
   color: #c29357;
 }
 
-/* Style the logout button */
 .navbar button {
   background-color: #c29357;
   color: #fff;
@@ -52,4 +51,7 @@
 .navbar button:hover {
   background-color: #411501;
   color: #fff;
+}.navbar .icon {
+  margin-right: 0.5rem; /* Adjust as needed */
+  vertical-align: middle;
 }

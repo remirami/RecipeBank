@@ -10,7 +10,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState(null);
   const [errors, setErrors] = useState({});
-
+  const [serverError, setServerError] = useState(null);
   const { t } = useTranslation();
   const handleConfirmPasswordChange = (e) => {
     const value = e.target.value;
@@ -44,11 +44,15 @@ const Register = () => {
       console.log(response);
       setSuccessMessage(
         "User created successfully. Please confirm your email."
-      ); // Add this line
+      );
+      setServerError(null);
     } catch (error) {
       console.error(
         "Registration error:",
         error.response ? error.response.data : error
+      );
+      setServerError(
+        error.response ? error.response.data.message : error.toString()
       );
     }
   };
@@ -56,7 +60,7 @@ const Register = () => {
     <div className={styles.container}>
       <h2>{t("register.title")}</h2>
       {successMessage && <p>{successMessage}</p>}
-
+      {serverError && <p className={styles.error}>{serverError}</p>}
       <form onSubmit={handleSubmit} className={styles.formWrapper}>
         <div className={styles.formGroup}>
           <label htmlFor="username">{t("register.username")}:</label>

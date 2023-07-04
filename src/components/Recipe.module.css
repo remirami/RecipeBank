@@ -3,6 +3,8 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
+  font-family: 'Quicksand', sans-serif;
+
 }
 
 .recipeCardWrapper {
@@ -19,7 +21,54 @@
   padding: 1rem;
   width: 100%;
 }
+.deleteNotification {
+  font-size: 20px;
+  text-align: center;
+}
+.notificationContainer {
+  background-color: #F5F5DC;
+  text-align: center;
+  font-size: 1.5em;
+  padding: 1em;
+  margin: 1em auto;
+  border-radius: 5px;
+  width: fit-content;
+}
+.returnButton {
+  margin: 20px 0;
+  padding: 10px 20px;
+  background-color: #4b2903;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.0rem;
+}
+.returnButton:hover {
+transform: scale(1.1);
+}
+.returnButton:active {
+  opacity: 0.8;
+}
+.likeMessage {
+  margin: 20px 0;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
 
+.unlikeMessage {
+  margin: 20px 0;
+  padding: 10px 20px;
+  background-color: #da190b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
 @media (max-width: 1024px) {
   .searchResultsGrid {
     grid-template-columns: repeat(2, 1fr);

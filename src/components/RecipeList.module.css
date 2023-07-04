@@ -3,7 +3,9 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
   padding: 1rem;
+  
 }
+  
 
 .recipeCard {
   background-color: #4b2903;
@@ -11,8 +13,15 @@
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-}
+  margin: 10px;
+  padding: 10px; 
+  transition: transform 0.3s ease;
+  font-family: 'Quicksand', sans-serif;
 
+}
+.recipeCard:hover {
+  transform: scale(1.1); 
+}
 .recipeCard a {
   text-decoration: none;
   color: #ffffff;

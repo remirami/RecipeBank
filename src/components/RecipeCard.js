@@ -9,6 +9,10 @@ const RecipeCard = ({ recipe }) => {
     return <div>Loading...</div>;
   }
 
+  const username = recipe.user_id
+    ? recipe.user_id.username
+    : t("recipeCard.unknown_user");
+
   return (
     <div className={styles.recipeCard}>
       <h3>{recipe.name}</h3>
@@ -24,7 +28,7 @@ const RecipeCard = ({ recipe }) => {
           {index + 1}. {instruction}
         </p>
       ))}
-      {t("recipeCard.made_by")} {recipe.user_id.username}
+      {t("recipeCard.made_by")} {username}
     </div>
   );
 };

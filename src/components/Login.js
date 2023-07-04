@@ -59,11 +59,12 @@ const Login = ({ onLogin }) => {
               />
             </div>
             <div className={styles.buttonContainer}>
-              {/* Use the new button style */}
               <button type="submit" className={styles.loginButton}>
                 {t("login.login_button")}
               </button>
-              <Link to="/forgot-password">Forgot password?</Link>
+              <div className={styles.forgotButton}>
+                <Link to="/forgot-password">{t("login.forgotpassword")}</Link>
+              </div>
             </div>
           </form>
         </>

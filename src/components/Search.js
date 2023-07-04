@@ -1,21 +1,30 @@
 import React, { useState } from "react";
 import { searchRecipes } from "../services/api";
-import RecipeCard from "./RecipeCard";
+import OpenBook from "./OpenBook";
 import { useTranslation } from "react-i18next";
 import styles from "./Search.module.css";
+import { Link } from "react-router-dom";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchByLikes, setSearchByLikes] = useState(false);
 
   const { t } = useTranslation();
 
   const handleSearch = async () => {
-    const results = await searchRecipes(searchTerm, selectedCategory);
+    const results = await searchRecipes(
+      searchTerm,
+      selectedCategory,
+      searchByLikes
+    );
     setSearchResults(results);
     setSearchPerformed(true);
+  };
+  const handleCheckboxChange = (event) => {
+    setSearchByLikes(event.target.checked);
   };
 
   const handleSearchInput = (event) => {
@@ -40,11 +49,12 @@ const Search = () => {
           onChange={handleSearchInput}
           onKeyDown={handleSearchKeyDown}
         />
+
         <select
+          className={styles.searchSelect}
           value={selectedCategory}
           onChange={(event) => setSelectedCategory(event.target.value)}
         >
-          <option value="">{t("addRecipe.options.selectCategory")}</option>
           <option value="">{t("addRecipe.options.selectCategory")}</option>
           <option value="Vegetable">{t("addRecipe.options.vegetable")}</option>
           <option value="Meat">{t("addRecipe.options.meat")}</option>
@@ -92,15 +102,30 @@ const Search = () => {
 
           <option value="Sugar-free">{t("addRecipe.options.sugarFree")}</option>
         </select>
-
+        <div className={styles.checkboxContainer}>
+          <input
+            type="checkbox"
+            checked={searchByLikes}
+            onChange={handleCheckboxChange}
+          />
+          <label className={styles.checkboxLabel}>
+            {t("search.search_by_likes")}
+          </label>
+        </div>
         <button onClick={handleSearch} className={styles.searchButton}>
           {t("search.search_button")}
         </button>
       </div>
-      <div>
+      <div
+        className={`${styles.resultsContainer} ${
+          searchResults.length > 0 ? styles.hasResults : ""
+        }`}
+      >
         {searchResults.length > 0
           ? searchResults.map((recipe) => (
-              <RecipeCard key={recipe._id} recipe={recipe} />
+              <Link key={recipe._id} to={`/recipes/${recipe._id}`}>
+                {recipe.name}
+              </Link>
             ))
           : searchTerm.length > 0 &&
             searchPerformed && <p>{t("search.no_results")}</p>}

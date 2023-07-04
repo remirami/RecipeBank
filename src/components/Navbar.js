@@ -4,6 +4,15 @@ import styles from "./Navbar.module.css";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../services/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHome,
+  faBookOpen,
+  faDice,
+  faSearch,
+  faKey,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = ({ isLoggedIn, onLogout, sticky }) => {
   console.log("Navbar isLoggedIn:", isLoggedIn);
@@ -26,35 +35,38 @@ const Navbar = ({ isLoggedIn, onLogout, sticky }) => {
   return (
     <nav className={styles.navbar}>
       <NavLink to="/" activeClassName={styles.active}>
-        {t("navbar.home")}
+        <FontAwesomeIcon icon={faHome} /> {t("navbar.home")}
       </NavLink>
       <NavLink to="/recipes" activeClassName={styles.active}>
-        {t("navbar.recipes")}
+        <FontAwesomeIcon icon={faBookOpen} />
+        Recipes {t("navbar.recipes")}
       </NavLink>
       <NavLink to="/random-recipe" activeClassName={styles.active}>
-        {t("navbar.random_recipe")}
+        <FontAwesomeIcon icon={faDice} /> {t("navbar.random_recipe")}
       </NavLink>
       <NavLink to="/search" activeClassName={styles.active}>
-        {t("navbar.search")}
+        <FontAwesomeIcon icon={faSearch} /> {t("navbar.search")}
       </NavLink>
       {isLoggedIn ? (
         <>
           <NavLink to="/recipes/add" activeClassName={styles.active}>
-            {t("navbar.add_recipe")}
+            <FontAwesomeIcon icon={faBookOpen} /> {t("navbar.add_recipe")}
           </NavLink>
           <NavLink to="/profile" activeClassName={styles.active}>
-            {t("navbar.profile")}
+            <FontAwesomeIcon icon={faUser} /> {t("navbar.profile")}
           </NavLink>
 
-          <button onClick={handleLogout}>{t("navbar.logout")}</button>
+          <button onClick={handleLogout}>
+            <FontAwesomeIcon icon={faKey} /> {t("navbar.logout")}
+          </button>
         </>
       ) : (
         <>
           <NavLink to="/login" activeClassName={styles.active}>
-            {t("navbar.login")}
+            <FontAwesomeIcon icon={faKey} /> {t("navbar.login")}
           </NavLink>
           <NavLink to="/register" activeClassName={styles.active}>
-            {t("navbar.register")}
+            <FontAwesomeIcon icon={faKey} /> {t("navbar.register")}
           </NavLink>
         </>
       )}

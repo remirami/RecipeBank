@@ -2,5 +2,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: 'Quicksand', sans-serif;
+
   }
-  
+.container a:hover{
+  background-color: #ffffff;
+
+}
