@@ -12,6 +12,7 @@ const foodSubTypes = {
   "Fruits & Berries": ["Fruit", "Berries"],
   "Marinades & Sauces": ["Marinade", "Sauce"],
   "Grains & Rice": ["Grain", "Rice"],
+  Vegetables: [],
 };
 
 const AddRecipe = () => {
@@ -45,7 +46,15 @@ const AddRecipe = () => {
     instructions: "",
   });
   const [error, setError] = useState("");
+  // Add a state variable to track if there are unsaved changes
+  const [isBlocking, setIsBlocking] = useState(false);
 
+  function validateNotEmpty(field) {
+    if (typeof field === "string" && field.trim() === "") {
+      return t("addRecipe.validation.fieldRequired");
+    }
+    return "";
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -63,48 +72,57 @@ const AddRecipe = () => {
       foodType: "",
       dietaryPreference: "",
     };
+
     if (servingSize) {
       // Only validate if servingSize is not empty
-      if (Number(servingSize) <= 0) {
+      if (!Number.isInteger(Number(servingSize)) || Number(servingSize) <= 0) {
         newFieldErrors.servingSize = t("addRecipe.errors.servingSizeInvalid");
         isValid = false;
       }
     }
     if (ingredients.length > 30) {
-      newFieldErrors.ingredients = "You can add up to 30 ingredients only.";
+      newFieldErrors.ingredients = t("addRecipe.errors.maxIngredients");
       isValid = false;
     }
     if (instructions.length > 30) {
-      newFieldErrors.instructions = "You can add up to 30 instructions only.";
+      newFieldErrors.instructions = t("addRecipe.errors.maxInstructions");
       isValid = false;
     }
-    const hasInvalidIngredientAmount = ingredients.some(
-      (ingredient) =>
-        ingredient.quantity !== undefined &&
-        ingredient.quantity !== null &&
-        ingredient.quantity > 0 &&
-        !validateAmount(ingredient.quantity)
-    );
-    const hasEmptyIngredients = ingredients.some(
-      (ingredient) => ingredient.name.trim() === ""
-    );
-    const hasEmptyAmounts = ingredients.some(
-      (ingredient) =>
-        ingredient.quantity === undefined ||
-        ingredient.quantity === null ||
-        ingredient.quantity === 0
-    );
-    const hasEmptyInstructions = instructions.some(
-      (instruction) => instruction.trim() === ""
-    );
-    // Check if prepTime is a positive number
-    if (Number(prepTime) <= 0) {
+    // Validate name, description and category
+    newFieldErrors.name = validateNotEmpty(name);
+    newFieldErrors.description = validateNotEmpty(description);
+    newFieldErrors.category = validateNotEmpty(category);
+
+    ingredients.forEach((ingredient, index) => {
+      const ingredientNameError = validateNotEmpty(ingredient.name);
+      const ingredientQuantityError = validateNotEmpty(ingredient.quantity);
+
+      if (ingredientNameError) {
+        newFieldErrors.ingredients = ingredientNameError;
+        isValid = false;
+      }
+      if (ingredientQuantityError) {
+        newFieldErrors.ingredients = ingredientQuantityError;
+        isValid = false;
+      }
+    });
+
+    instructions.forEach((instruction, index) => {
+      const instructionError = validateNotEmpty(instruction);
+
+      if (instructionError) {
+        newFieldErrors.instructions = instructionError;
+        isValid = false;
+      }
+    });
+    // Check if prepTime is a positive integer number
+    if (!Number.isInteger(Number(prepTime)) || Number(prepTime) <= 0) {
       newFieldErrors.prepTime = t("addRecipe.errors.prepTimeInvalid");
       isValid = false;
     }
 
-    // Check if cookTime is a positive number
-    if (Number(cookTime) <= 0) {
+    // Check if cookTime is a positive integer number
+    if (!Number.isInteger(Number(cookTime)) || Number(cookTime) <= 0) {
       newFieldErrors.cookTime = t("addRecipe.errors.cookTimeInvalid");
       isValid = false;
     }
@@ -128,46 +146,6 @@ const AddRecipe = () => {
       isValid = false;
     }
 
-    if (hasEmptyInstructions) {
-      newFieldErrors.instructions = t("addRecipe.errors.instructionRequired");
-      isValid = false;
-    }
-
-    if (hasEmptyAmounts) {
-      newFieldErrors.ingredients = t("addRecipe.errors.amountsRequired");
-      isValid = false;
-    }
-
-    if (hasEmptyIngredients) {
-      newFieldErrors.ingredients = t("addRecipe.errors.ingredientsRequired");
-      isValid = false;
-    }
-    if (hasInvalidIngredientAmount) {
-      newFieldErrors.ingredients = t(
-        "addRecipe.errors.invalidIngredientAmount"
-      );
-      isValid = false;
-    }
-
-    if (instructions.length === 0) {
-      newFieldErrors.instructions = t("addRecipe.errors.instructionsRequired");
-      isValid = false;
-    }
-
-    if (instructions.length === 0) {
-      newFieldErrors.instructions = t("addRecipe.errors.instructionsRequired");
-      isValid = false;
-    }
-    if (name.trim() === "") {
-      newFieldErrors.name = t("addRecipe.errors.nameRequired");
-      isValid = false;
-    }
-
-    if (category.trim() === "") {
-      newFieldErrors.category = t("addRecipe.errors.categoryRequired");
-      isValid = false;
-    }
-
     if (!isValid) {
       setFieldErrors(newFieldErrors);
       return;
@@ -176,12 +154,12 @@ const AddRecipe = () => {
     try {
       const { exists } = await getRecipeByName(name);
       if (exists) {
-        setError("A recipe with this name already exists.");
+        setError(t("addRecipe.errors.recipeExists"));
         return;
       }
     } catch (error) {
-      console.error("Error checking recipe name:", error);
-      setError("Error checking recipe name. Please try again.");
+      console.error(t("addRecipe.errors.userNotLoggedIn"));
+      setError(t("addRecipe.errors.recipeExists"));
       return;
     }
     const userId = localStorage.getItem("userId") || null;
@@ -189,7 +167,7 @@ const AddRecipe = () => {
 
     if (!userId) {
       console.error("User is not logged in");
-      setError("You must be logged in to add a recipe.");
+      setError(t("addRecipe.errors.mustBeLoggedIn"));
       return;
     }
     const recipe = {
@@ -217,6 +195,7 @@ const AddRecipe = () => {
       const response = await createRecipe(recipe);
 
       if (response.status === "success") {
+        setIsBlocking(false); // If submit is successful, set isBlocking to false
         setError(""); // Clear the error message after successful submission
         setSuccessMessage("Recipe created successfully!");
         console.log("New recipe created with ID:", response.data.recipeId); // Print the recipeId from response.data.recipeId
@@ -238,6 +217,7 @@ const AddRecipe = () => {
 
     return isValid;
   };
+
   const handleIngredientChange = (index, field, value) => {
     setError("");
     let updatedIngredients = [...ingredients]; // Create a copy of ingredients
@@ -274,7 +254,7 @@ const AddRecipe = () => {
 
   const addIngredient = () => {
     if (ingredients.length >= 30) {
-      setError("You can add up to 30 ingredients only.");
+      setError(t("addRecipe.errors.maxIngredients"));
       return;
     }
     setError("");
@@ -286,7 +266,7 @@ const AddRecipe = () => {
 
   const removeIngredient = (index) => {
     if (ingredients.length === 1) {
-      setError("You must have at least one ingredient.");
+      setError(t("addRecipe.errors.atLeastOneIngredient"));
       return;
     }
     setIngredients(ingredients.filter((_, i) => i !== index));
@@ -297,21 +277,38 @@ const AddRecipe = () => {
     newInstructions[index] = event.target.value;
     setInstructions(newInstructions);
   };
-  const handleBlur = (event, index) => {
+  const handleBlur = (event, field) => {
     const value = event.target.value;
-    if (!validateAmount(value)) {
-      const newAmountErrors = [...amountErrors];
-      newAmountErrors[index] =
-        "Invalid amount. Please enter a number followed by a valid unit.";
-      setAmountErrors(newAmountErrors);
-    }
-  };
+    let error = "";
 
+    if (field === "ingredients" || field === "instructions") {
+      // Check if it's an array and not empty
+      if (!Array.isArray(value) || value.length === 0) {
+        error = t("addRecipe.errors.fieldEmpty");
+      }
+    } else if (value.trim() === "") {
+      if (field === "category" || field === "foodType") {
+        error = "Please select a value.";
+      } else {
+        error = t("addRecipe.errors.fieldEmpty");
+      }
+    } else if (
+      (field === "prepTime" || field === "cookTime") &&
+      (!Number.isInteger(Number(value)) || Number(value) <= 0)
+    ) {
+      error = "This field requires a positive integer value.";
+    }
+
+    setFieldErrors({
+      ...fieldErrors,
+      [field]: error,
+    });
+  };
   const handleAddInstruction = () => {
     if (instructions.length < 30) {
       setInstructions([...instructions, ""]);
     } else {
-      setError("You can add up to 30 instructions only.");
+      setError(t("addRecipe.errors.maxIngredients"));
     }
   };
 
@@ -323,6 +320,14 @@ const AddRecipe = () => {
   const handleMainFoodTypeChange = (index, event) => {
     const newFoodType = [...foodType];
     newFoodType[index].mainType = event.target.value;
+    // Check if there are subTypes for the selected mainType
+    if (
+      !foodSubTypes[event.target.value] ||
+      foodSubTypes[event.target.value].length === 0
+    ) {
+      // If not, clear the subTypes
+      newFoodType[index].contains = [];
+    }
     setFoodType(newFoodType);
   };
 
@@ -371,9 +376,7 @@ const AddRecipe = () => {
         )
       )
     ) {
-      setError(
-        `Cannot set dietary preference as ${value} when non-compatible food types are selected.`
-      );
+      setError(t("addRecipe.errors.nonCompatibleFoodTypes"));
       return;
     }
 
@@ -397,6 +400,7 @@ const AddRecipe = () => {
             value={name}
             onChange={(event) => setName(event.target.value)}
             className={styles.formElement}
+            onBlur={(event) => handleBlur(event, "name")}
             maxLength="50"
           />
           {fieldErrors.name && (
@@ -423,6 +427,7 @@ const AddRecipe = () => {
             value={prepTime}
             onChange={(event) => setPrepTime(event.target.value)}
             className={styles.formElement}
+            onBlur={(event) => handleBlur(event, "prepTime")}
             min="0"
             max="1200"
           />
@@ -437,11 +442,12 @@ const AddRecipe = () => {
             value={cookTime}
             onChange={(event) => setCookTime(event.target.value)}
             className={styles.formElement}
+            onBlur={(event) => handleBlur(event, "cookTime")}
             min="0"
             max="1200"
           />
-          {fieldErrors.cookingTime && (
-            <div className={styles.error}>{fieldErrors.cookingTime}</div>
+          {fieldErrors.cookTime && (
+            <div className={styles.error}>{fieldErrors.cookTime}</div>
           )}
         </label>
         <label className={styles.labelContainer}>
@@ -467,6 +473,7 @@ const AddRecipe = () => {
                 onChange={(event) => handleMainFoodTypeChange(index, event)}
                 required
                 className={styles.formElement}
+                onBlur={(event) => handleBlur(event, "foodType")}
               >
                 <option value="">{t("addRecipe.foodTypeTranslation")}</option>
                 {[
@@ -658,6 +665,7 @@ const AddRecipe = () => {
             value={category}
             onChange={(event) => setCategory(event.target.value)}
             className={styles.categorySelect}
+            onBlur={(event) => handleBlur(event, "category")}
           >
             {category === "" && (
               <option value="">{t("addRecipe.options.selectCategory")}</option>
@@ -698,8 +706,12 @@ const AddRecipe = () => {
                 onChange={(event) =>
                   handleIngredientChange(index, "name", event.target.value)
                 }
+                onBlur={(event) => handleBlur(event, "ingredient")}
                 maxLength="50"
               />
+              {fieldErrors.ingredient && (
+                <div className={styles.error}>{fieldErrors.ingredient}</div>
+              )}
             </label>
 
             <label className={styles.labelContainer}>
@@ -789,8 +801,12 @@ const AddRecipe = () => {
                 type="text"
                 value={instruction}
                 onChange={(event) => handleInstructionChange(event, index)}
+                onBlur={(event) => handleBlur(event, "instruction")}
                 maxLength="60"
               />
+              {fieldErrors.instruction && (
+                <div className={styles.error}>{fieldErrors.instruction}</div>
+              )}
             </label>
             <button
               type="button"

@@ -50,14 +50,14 @@
           "g": "g (grammoja)",
           "kg": "kg (kilogrammoja)",
           "oz": "oz (unsseja)",
-          "lb": "lb (pounds)",
+          "lb": "lb (paunoja)",
           "dl": "dl (desilitroja)",
           "ml": "ml (millilitroja)",
           "l": "l (litroja)",
           "tbsp": "tbsp (ruokalusikallinen)",
           "tsp": "tsp (teelusikallinen)",
-          "cup": "cup",
-          "piece": "piece"
+          "cup": "kuppi",
+          "piece": "kpl"
         }    
       },
         "instructions": {
@@ -78,7 +78,17 @@
         "instructionRequired": "Ei voi olla tyhjä",
         "invalidIngredientAmount": "Määrä vaaditaan",
         "prepTimeInvalid": "Preppausajan tulee olla yli 0 minuuttia.",
-        "cookTimeInvalid": "Kokkausajan tulee olla yli 0 minuuttia."
+        "cookTimeInvalid": "Kokkausajan tulee olla yli 0 minuuttia.",
+        "fieldRequired": "Tämä kenttä on pakollinen.",
+        "servingSizeInvalid": "Annoskoon on oltava positiivinen numero.",
+        "maxIngredients": "Voit lisätä enintään 30 ainesosaa.",
+        "maxInstructions": "Voit lisätä enintään 30 ohjetta.",
+        "recipeExists": "Tällä nimellä oleva resepti on jo olemassa.",
+        "userNotLoggedIn": "Käyttäjä ei ole kirjautunut sisään.",
+        "mustBeLoggedIn": "Sinun on kirjauduttava sisään, jotta voit lisätä reseptin.",
+        "errorCreatingRecipe": "Virhe luotaessa reseptiä. Yritä uudelleen.",
+        "fieldEmpty": "Tämä kenttä ei voi olla tyhjä.",
+        "nonCompatibleFoodTypes": "Ravintomielipiteitä ei voi asettaa, kun valittuna on yhteensopimattomia elintarviketyyppejä."
 
 
       },
@@ -199,8 +209,48 @@
         "search_placeholder": "Etsi nimen tai ainesosan perusteella",
         "search_button": "Haku",
         "search_by_likes": "Lajittele tykkäysten perusteella",
-
-        "no_results": "Ei hakutuloksia. Yritä uudestaan."
+        "reset_button": "Nollaa",
+        "no_results": "Ei hakutuloksia. Yritä uudestaan.",
+        "dietaryPreferences":"Erikoisruokavalio",
+        "options": {
+          "selectCategory": "Valitse kategoria",
+          "Dessert": "Jälkiruoka",
+          "Main Course": "Pääruoka",
+          "Appetizer": "Alkupala",
+          "Side Dish": "Lisuke",
+          "Breakfast": "Aamupala",
+          "Salad": "Salaatti",
+          "Soup": "Keitto",
+          "Snack": "Välipala",
+          "Pizza": "Pizza",
+          "Pasta":  "Pasta",
+          "Beverage": "Juoma",
+          "Bread": "Leipä",
+          "selectFoodType": "Valitse ruokatyyppi",
+          "selectSubType": "Valitse alatyyppi",
+          "Vegetable": "Kasvis",
+          "Red Meat & Ground Meat": "Punainen liha & Jauheliha",
+          "Marinades & Sauces":"Marinaadit & Kastikkeet",
+          "Fish & Seafood": "Kala & Äyriäiset",
+          "Dairy & Eggs":"Maitotuotteet & Munat",
+          "Chicken & Poultry":"Kana & Linnut",
+          "Grains & Rice":"Viljat & riisi",
+          "Fruits & Berries":"Hedelmät & Marjat"
+        },
+        "dietaryOptions": {
+          "vegan": "Vegaani",
+          "vegetarian": "Kasvissyöjä",
+          "glutenFree": "Gluteeniton",
+          "dairyFree": "Maidoton",
+          "paleo": "Paleo",
+          "keto": "Keto",
+          "lowCarb": "Vähähiilihydraattinen",
+          "lowFat": "Vähärasvainen",
+          "lowSodium": "Vähäsuolainen",
+          "sugarFree": "Sokeriton",
+          "lactoseIntolerant": "Laktoosi-intolerantti",
+          "eggFree": "Kananmunaton"
+        }
       },  "recipeList": {
         "title": "Reseptit",
         "searchPlaceholder": "Etsi reseptejä nimellä, kategorialla tai ainesosilla"
@@ -279,7 +329,7 @@
             "bread": "Leipä"
           },
           "ingredients": {
-            "label": "Ingredients",
+            "label": "Ainekset",
 
             "unit":{
               "g": "g (grammoja)",
@@ -291,8 +341,8 @@
               "l": "l (litroja)",
               "tbsp": "tbsp (ruokalusikallinen)",
               "tsp": "tsp (teelusikallinen)",
-              "cup": "cup",
-              "piece": "Piece"
+              "cup": "kuppi",
+              "piece": "kpl"
             
       
             }

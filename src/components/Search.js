@@ -10,6 +10,7 @@ const Search = () => {
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchByLikes, setSearchByLikes] = useState(false);
+  const [dietaryPreferences, setDietaryPreferences] = useState([]);
   const [foodType, setFoodType] = useState("");
   const [subType, setSubType] = useState("");
   const foodSubTypes = {
@@ -30,7 +31,8 @@ const Search = () => {
       selectedCategory,
       searchByLikes,
       foodType,
-      subType
+      subType,
+      dietaryPreferences
     );
     setSearchResults(results);
     setSearchPerformed(true);
@@ -48,12 +50,22 @@ const Search = () => {
       handleSearch();
     }
   };
+  const handleDietaryPreferencesChange = (event) => {
+    const { value, checked } = event.target;
+
+    setDietaryPreferences((prevPreferences) =>
+      checked
+        ? [...prevPreferences, value]
+        : prevPreferences.filter((pref) => pref !== value)
+    );
+  };
   const resetSearch = () => {
     setSearchTerm("");
     setSelectedCategory("");
     setSearchByLikes(false);
     setFoodType("");
     setSubType("");
+    setDietaryPreferences([]);
   };
 
   return (
@@ -129,13 +141,130 @@ const Search = () => {
         >
           <option value="">{t("search.options.selectSubType")}</option>
           {foodType &&
+            foodSubTypes[foodType] &&
             foodSubTypes[foodType].map((subTypeOption) => (
               <option key={subTypeOption} value={subTypeOption}>
                 {t(`search.options.${subTypeOption}`)}
               </option>
-            ))}
+            ))}{" "}
         </select>
-
+        <label className={styles.labelContainer}>
+          {t("search.dietaryPreferences")}:
+          <div className={styles.formElement}>
+            <input
+              type="checkbox"
+              id="vegan"
+              name="dietaryPreference"
+              value="Vegan"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="vegan">{t("search.dietaryOptions.vegan")}</label>
+            <input
+              type="checkbox"
+              id="vegetarian"
+              name="dietaryPreference"
+              value="Vegetarian"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="vegetarian">
+              {t("search.dietaryOptions.vegetarian")}
+            </label>
+            <input
+              type="checkbox"
+              id="glutenFree"
+              name="dietaryPreference"
+              value="Gluten-free"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="glutenFree">
+              {t("search.dietaryOptions.glutenFree")}
+            </label>
+            <input
+              type="checkbox"
+              id="dairyFree"
+              name="dietaryPreference"
+              value="Dairy-free"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="dairyFree">
+              {t("search.dietaryOptions.dairyFree")}
+            </label>
+            <input
+              type="checkbox"
+              id="paleo"
+              name="dietaryPreference"
+              value="Paleo"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="paleo">{t("search.dietaryOptions.paleo")}</label>
+            <input
+              type="checkbox"
+              id="keto"
+              name="dietaryPreference"
+              value="Keto"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="keto">{t("search.dietaryOptions.keto")}</label>
+            <input
+              type="checkbox"
+              id="lowCarb"
+              name="dietaryPreference"
+              value="Low-carb"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="lowCarb">
+              {t("search.dietaryOptions.lowCarb")}
+            </label>
+            <input
+              type="checkbox"
+              id="lowFat"
+              name="dietaryPreference"
+              value="Low-fat"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="lowFat">{t("search.dietaryOptions.lowFat")}</label>
+            <input
+              type="checkbox"
+              id="lowSodium"
+              name="dietaryPreference"
+              value="Low-sodium"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="lowSodium">
+              {t("search.dietaryOptions.lowSodium")}
+            </label>
+            <input
+              type="checkbox"
+              id="sugarFree"
+              name="dietaryPreference"
+              value="Sugar-free"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="sugarFree">
+              {t("search.dietaryOptions.sugarFree")}
+            </label>
+            <input
+              type="checkbox"
+              id="lactoseIntolerant"
+              name="dietaryPreference"
+              value="Lactose-intolerant"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="lactoseIntolerant">
+              {t("search.dietaryOptions.lactoseIntolerant")}
+            </label>
+            <input
+              type="checkbox"
+              id="eggFree"
+              name="dietaryPreference"
+              value="Egg-free"
+              onChange={handleDietaryPreferencesChange}
+            />
+            <label htmlFor="eggFree">
+              {t("search.dietaryOptions.eggFree")}
+            </label>{" "}
+          </div>
+        </label>
         <div className={styles.checkboxContainer}>
           <input
             type="checkbox"
