@@ -64,7 +64,7 @@ export const updateRecipe = async (id, updatedRecipe) => {
 
 export async function deleteRecipe(id) {
   const response = await api.delete(`/recipes/${id}`);
-  return response.data;
+  return response;
 }
 
 export const loginUser = async (username, password) => {
@@ -82,6 +82,8 @@ export const loginUser = async (username, password) => {
   };
   localStorage.setItem("recipeAppUser", JSON.stringify(user));
   localStorage.setItem("userId", response.data.user._id);
+  localStorage.setItem("isAdmin", response.data.user.isAdmin);
+
   return response;
 };
 
@@ -93,6 +95,46 @@ export async function registerUser(username, email, password) {
   });
   return response.data;
 }
+export async function getRecipeByName(name) {
+  try {
+    const response = await api.get("/recipes/check-name", {
+      params: { name },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting recipe by name:", error);
+    throw error;
+  }
+}
+export const updateLikeRecipe = async (recipeId, change) => {
+  try {
+    const response =
+      change > 0
+        ? await api.post(`/recipes/${recipeId}/thumbsup`)
+        : await api.delete(`/recipes/${recipeId}/thumbsup`);
+    console.log("updatelike response:", response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating the like of the recipe:", error);
+    throw error;
+  }
+};
+
+export const updateDislikeRecipe = async (recipeId, change) => {
+  try {
+    const response =
+      change > 0
+        ? await api.post(`/recipes/${recipeId}/thumbsdown`)
+        : await api.delete(`/recipes/${recipeId}/thumbsdown`);
+    console.log("updateDislike response:", response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating the dislike of the recipe:", error);
+    throw error;
+  }
+};
 
 export async function getRandomRecipe() {
   const response = await api.get("/recipes");
@@ -100,9 +142,13 @@ export async function getRandomRecipe() {
   const randomIndex = Math.floor(Math.random() * recipes.length);
   return recipes[randomIndex];
 }
-export async function searchRecipes(searchTerm, category) {
+export async function searchRecipes(
+  searchTerm,
+  category,
+  searchByLikes = false
+) {
   const response = await api.get("/search", {
-    params: { searchTerm, category },
+    params: { searchTerm, category, searchByLikes, searchByUsername: true },
   });
   return response.data;
 }

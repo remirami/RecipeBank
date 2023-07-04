@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { searchRecipes } from "../services/api";
-import OpenBook from "./OpenBook";
 import { useTranslation } from "react-i18next";
 import styles from "./Search.module.css";
 import { Link } from "react-router-dom";
@@ -11,6 +10,17 @@ const Search = () => {
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchByLikes, setSearchByLikes] = useState(false);
+  const [foodType, setFoodType] = useState("");
+  const [subType, setSubType] = useState("");
+  const foodSubTypes = {
+    "Red Meat & Ground Meat": ["Red Meat", "Ground Meat"],
+    "Fish & Seafood": ["Fish", "Seafood"],
+    "Dairy & Eggs": ["Dairy", "Eggs"],
+    "Chicken & Poultry": ["Chicken", "Poultry"],
+    "Fruits & Berries": ["Fruit", "Berries"],
+    "Marinades & Sauces": ["Marinade", "Sauce"],
+    "Grains & Rice": ["Grain", "Rice"],
+  };
 
   const { t } = useTranslation();
 
@@ -18,7 +28,9 @@ const Search = () => {
     const results = await searchRecipes(
       searchTerm,
       selectedCategory,
-      searchByLikes
+      searchByLikes,
+      foodType,
+      subType
     );
     setSearchResults(results);
     setSearchPerformed(true);
@@ -35,6 +47,13 @@ const Search = () => {
     if (event.key === "Enter") {
       handleSearch();
     }
+  };
+  const resetSearch = () => {
+    setSearchTerm("");
+    setSelectedCategory("");
+    setSearchByLikes(false);
+    setFoodType("");
+    setSubType("");
   };
 
   return (
@@ -55,53 +74,68 @@ const Search = () => {
           value={selectedCategory}
           onChange={(event) => setSelectedCategory(event.target.value)}
         >
-          <option value="">{t("addRecipe.options.selectCategory")}</option>
-          <option value="Vegetable">{t("addRecipe.options.vegetable")}</option>
-          <option value="Meat">{t("addRecipe.options.meat")}</option>
-          <option value="Dessert">{t("addRecipe.options.dessert")}</option>
-          <option value="Fish">{t("addRecipe.options.fish")}</option>
-          <option value="Dairy">{t("addRecipe.options.dairy")}</option>
-          <option value="Poultry">{t("addRecipe.options.poultry")}</option>
-          <option value="Grains">{t("addRecipe.options.grains")}</option>
-          <option value="Legumes">{t("addRecipe.options.legumes")}</option>
-          <option value="Fruits">{t("addRecipe.options.fruits")}</option>
-          <option value="Nuts">{t("addRecipe.options.nuts")}</option>
-          <option value="Beverages">{t("addRecipe.options.beverages")}</option>
-          <option value="Soups">{t("addRecipe.options.soups")}</option>
-          <option value="Salads">{t("addRecipe.options.salads")}</option>
-          <option value="Breads">{t("addRecipe.options.breads")}</option>
-          <option value="Snacks">{t("addRecipe.options.snacks")}</option>
-          <option value="Appetizers">
-            {t("addRecipe.options.appetizers")}
-          </option>
-          <option value="Sauces">{t("addRecipe.options.sauces")}</option>
-          <option value="Spices">{t("addRecipe.options.spices")}</option>
-          <option value="Seafood">{t("addRecipe.options.seafood")}</option>
-          <option value="Eggs">{t("addRecipe.options.eggs")}</option>
-          <option value="Pasta">{t("addRecipe.options.pasta")}</option>
-          <option value="Rice">{t("addRecipe.options.rice")}</option>
-          <option value="Pizza">{t("addRecipe.options.pizza")}</option>
-          <option value="Sandwiches">
-            {t("addRecipe.options.sandwiches")}
-          </option>
-          <option value="Stews">{t("addRecipe.options.stews")}</option>
-          <option value="Curries">{t("addRecipe.options.curries")}</option>
-          <option value="Vegan">{t("addRecipe.options.vegan")}</option>
-          <option value="Vegetarian">
-            {t("addRecipe.options.vegetarian")}
-          </option>
-          <option value="Gluten-free">
-            {t("addRecipe.options.glutenFree")}
-          </option>
-          <option value="Dairy-free">{t("addRecipe.options.dairyFree")}</option>
-          <option value="Paleo">{t("addRecipe.options.paleo")}</option>
-          <option value="Keto">{t("addRecipe.options.keto")}</option>
-          <option value="Low-carb">{t("addRecipe.options.lowCarb")}</option>
-          <option value="Low-fat">{t("addRecipe.options.lowFat")}</option>
-          <option value="Low-sodium">{t("addRecipe.options.lowSodium")}</option>
-
-          <option value="Sugar-free">{t("addRecipe.options.sugarFree")}</option>
+          <option value="">{t("search.options.selectCategory")}</option>
+          <option value="Dessert">{t("search.options.Dessert")}</option>
+          <option value="Main Course">{t("search.options.Main Course")}</option>
+          <option value="Appetizer">{t("search.options.Appetizer")}</option>
+          <option value="Breakfast">{t("search.options.Breakfast")}</option>
+          <option value="Side Dish">{t("search.options.Side Dish")}</option>
+          <option value="Salad">{t("search.options.Salad")}</option>
+          <option value="Soup">{t("search.options.Soup")}</option>
+          <option value="Snack">{t("search.options.Snack")}</option>
+          <option value="Pizza">{t("search.options.Pizza")}</option>
+          <option value="Bread">{t("search.options.Bread")}</option>
+          <option value="Beverage">{t("search.options.Beverage")}</option>
+          <option value="Pasta">{t("search.options.Pasta")}</option>
         </select>
+
+        <select
+          className={styles.searchSelect}
+          value={foodType}
+          onChange={(event) => {
+            setFoodType(event.target.value);
+            setSubType(""); // Reset subType when foodType changes
+          }}
+        >
+          <option value="">{t("search.options.selectFoodType")}</option>
+          <option value="Vegetable">{t("search.options.Vegetable")}</option>
+          <option value="Red Meat & Ground Meat">
+            {t("search.options.Red Meat & Ground Meat")}
+          </option>
+          <option value="Marinades & Sauces">
+            {t("search.options.Marinades & Sauces")}
+          </option>
+          <option value="Fish & Seafood">
+            {t("search.options.Fish & Seafood")}
+          </option>
+          <option value="Dairy & Eggs">
+            {t("search.options.Dairy & Eggs")}
+          </option>
+          <option value="Chicken & Poultry">
+            {t("search.options.Chicken & Poultry")}
+          </option>
+          <option value="Grains & Rice">
+            {t("search.options.Grains & Rice")}
+          </option>
+          <option value="Fruits & Berries">
+            {t("search.options.Fruits & Berries")}
+          </option>
+        </select>
+
+        <select
+          className={styles.searchSelect}
+          value={subType}
+          onChange={(event) => setSubType(event.target.value)}
+        >
+          <option value="">{t("search.options.selectSubType")}</option>
+          {foodType &&
+            foodSubTypes[foodType].map((subTypeOption) => (
+              <option key={subTypeOption} value={subTypeOption}>
+                {t(`search.options.${subTypeOption}`)}
+              </option>
+            ))}
+        </select>
+
         <div className={styles.checkboxContainer}>
           <input
             type="checkbox"
@@ -114,6 +148,9 @@ const Search = () => {
         </div>
         <button onClick={handleSearch} className={styles.searchButton}>
           {t("search.search_button")}
+        </button>
+        <button onClick={resetSearch} className={styles.resetButton}>
+          {t("search.reset_button")}
         </button>
       </div>
       <div

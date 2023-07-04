@@ -1,5 +1,8 @@
 {
-    "welcome": "Tervetuloa Reseptipankkiin!",
+    "welcomeTexts": {
+      "welcome": "Tervetuloa Reseptipankkiin",
+      "longText": "Onko sinulla isovanhempiesi mustikkapiirakkaresepti tuoreena muistissa? Entäpä se paras maistamasi hampurilainen? Tai oletko vain hakemassa inspiraatiota ruoanlaittoon? Tällä sivulla voit selata, lisätä ja jakaa lempireseptejäsi kätevästi."
+    },
     "changeLanguage": "Vaihda kieli",
     "loading": "Ladataan...",
     "recipe_not_found": "Reseptiä ei löytynyt",
@@ -15,53 +18,49 @@
       "name": "Nimi",
       "description": "Kuvaus",
       "category": "Kategoria",
+      "servingSize": "Annosmäärä",
+
       "options": {
         "selectCategory": "Valitse kategoria",
-        "vegetable": "Kasvis",
-        "meat": "Liha",
         "dessert": "Jälkiruoka",
-        "fish": "Kala",
-        "dairy": "Maito",
-        "poultry": "Siipikarja",
-        "grains": "Viljat",
-        "legumes": "Palkokasvit",
-        "fruits": "Hedelmät",
-        "nuts": "Pähkinät",
-        "beverages": "Juomat",
-        "soups": "Keitot",
-        "salads": "Salaatit",
-        "breads": "Leivät",
-        "snacks": "Välipalat",
-        "appetizers": "Alkupalat",
-        "sauces": "Kastikkeet",
-        "spices": "Mausteet",
-        "seafood": "Äyriäiset",
-        "eggs": "Munat",
-        "pasta": "Pasta",
-        "rice": "Riisi",
+        "main-course": "Pääruoka",
+        "appetizer": "Alkupala",
+        "side-dish": "Lisuke",
+        "breakfast": "Aamupala",
         "pizza": "Pizza",
-        "sandwiches": "Voileivät",
-        "stews": "Patat",
-        "curries": "Curryt",
-        "vegan": "Vegaani",
-        "vegetarian": "Kasvissyöjä",
-        "glutenFree": "Gluteeniton",
-        "dairyFree": "Maidoton",
-        "paleo": "Paleo",
-        "keto": "Keto",
-        "lowCarb": "Vähähiilihydraattinen",
-        "lowFat": "Vähärasvainen",
-        "lowSodium": "Vähäsuolainen",
-        "sugarFree": "Sokeriton"
+        "pasta": "Pasta",
+        "beverage": "Juoma",
+        "salad": "Salaatti",
+        "Soup": "Keitto",
+        "snack": "Välipala",
+        "bread": "Leipä"
+  
       },
       "ingredients": {
         "title": "Ainekset",
         "name": "Nimi",
         "amount": "Määrä",
         "remove": "Poista",
-        "addIngredient": "Lisää ainesosa"
+        "addIngredient": "Lisää ainesosa",
+        "add": "Lisää ainesosa",
+        "unitLabel": "Unit", 
+        "unit": {
+          "unitSelection": "Valitse mittayksikkö",
+  
+          "g": "g (grammoja)",
+          "kg": "kg (kilogrammoja)",
+          "oz": "oz (unsseja)",
+          "lb": "lb (pounds)",
+          "dl": "dl (desilitroja)",
+          "ml": "ml (millilitroja)",
+          "l": "l (litroja)",
+          "tbsp": "tbsp (ruokalusikallinen)",
+          "tsp": "tsp (teelusikallinen)",
+          "cup": "cup",
+          "piece": "piece"
+        }    
       },
-      "instructions": {
+        "instructions": {
         "title": "Ohjeet",
         "instruction": "Ohje",
         "remove": "Poista",
@@ -74,9 +73,76 @@
         "descriptionRequired": "Anna reseptille kuvaus",
         "categoryRequired": "Aseta reseptille kategoria",
         "ingredientsRequired": "Aseta vähintään yksi ainesosa",
-        "instructionsRequired": "Lisää ohjeet"
+        "instructionsRequired": "Lisää ohjeet",
+        "amountsRequired": "Lisää määrä",
+        "instructionRequired": "Ei voi olla tyhjä",
+        "invalidIngredientAmount": "Määrä vaaditaan",
+        "prepTimeInvalid": "Preppausajan tulee olla yli 0 minuuttia.",
+        "cookTimeInvalid": "Kokkausajan tulee olla yli 0 minuuttia."
 
-      }
+
+      },
+      "foodType": "Pääruokatyyppi",
+      "prepTime": "Preppausaika minuutteina",
+      "cookingTime": "Kokkausaika minuutteina",
+      "dietaryPreferences": "Erikoisruokavalio",
+      "dietaryOptions": {
+        "vegetarian": "Kasvis",
+        "vegan": "Vegaani",
+        "glutenFree": "Gluteeniton",
+        "lowFat": "Vähärasvainen",
+        "eggFree": "Kananmunaton",
+        "lowCarb": "Vähähiilihydraattinen",
+        "dairyFree": "Maidoton",
+        "lowSodium": "Vähäsuolainen",
+      "lowSugar": "Vähäsokerinen",
+      "lactoseIntolerant": "Laktoositon",
+      "paleo": "Paleo"
+
+      },
+  
+      "foodTypeTranslation": "Valitse ruokatyyppi",
+      "selectionOptions": {
+        "Vegetable": "Kasvis",
+        "Red Meat & Ground Meat": "Punainen liha & Jauheliha",
+        "Fish & Seafood": "Kala & Äyriäiset",
+        "Dairy & Eggs": "Maitotuotteet & Munat",
+        "Marinades & Sauces": "Marinaadit & Kastikkeet",
+        "Grains & Rice": "Viljat & riisi",
+        "Legumes": "Palkokasvit",
+        "Fruits & Berries": "Hedelmät & Marjat",
+        "Nuts": "Pähkinät",
+        "Chicken & Poultry": "Kana & Linnut",
+        "Beverages": "Juomat",
+        "Fish": "Kala",
+        "Seafood": "Merenelävät",
+        "Red Meat": "Punainen liha",
+        "Ground Meat": "Jauheliha",
+        "Dairy": "Maitotuotteet",
+        "Eggs": "Munat",
+        "Marinade": "Marinadit",
+        "Sauce": "Kastikkeet",
+        "Grain": "Viljat",
+        "Rice": "Riisi",
+        "Fruit": "Hedelmät",
+        "Berries": "Marjat",
+        "Chicken": "Kana",
+        "Poultry": "Siipikarja",
+
+        "Soups": "Keitot",
+        "Salads": "Salaatit",
+        "Breads": "Leivät",
+        "Snacks": "Välipalat",
+        "Spices": "Mausteet",
+        "Pasta": "Pasta",
+        "Pizza": "Pizza",
+        "Sandwiches": "Voileivät",
+        "Stews": "Padat",
+        "Curries": "Curryt"
+      },
+  
+      "backtoRecipes": "Takaisin resepteihin >"
+
   
   
     },
@@ -86,6 +152,8 @@
         "password": "Salasana",
         "login_button": "Kirjaudu sisään",
         "reset_password": "Unohtuiko salasana?",
+        "forgotpassword": "Unohditko salasanasi?",
+
         "errors": {
             "missingToken": "Token puuttuu vastauksesta.",
             "invalidCredentials": "Väärä käyttäjänimi tai salasana."
@@ -120,7 +188,8 @@
     ,  "randomRecipe": {
         "title": "Satunnainen resepti",
         "ingredients": "Ainekset:",
-        "instructions": "Valmistusohjeet:"
+        "instructions": "Valmistusohjeet:",
+        "ViewRecipe": "Näytä resepti"
       },
       "randomRecipeButton": {
         "text": "Satunnainen resepti"
@@ -129,6 +198,8 @@
         "search_recipes": "Etsi reseptejä",
         "search_placeholder": "Etsi nimen tai ainesosan perusteella",
         "search_button": "Haku",
+        "search_by_likes": "Lajittele tykkäysten perusteella",
+
         "no_results": "Ei hakutuloksia. Yritä uudestaan."
       },  "recipeList": {
         "title": "Reseptit",
@@ -145,16 +216,128 @@
         "confirmNewPassword": "Vahvista uusi salasana",
         "noRecipes": "Reseptejä ei löytynyt.",
         "loadingUserData": "Ladataan käyttäjätietoja...",
-        "yourRecipes": "Reseptisi"
+        "yourRecipes": "Reseptisi",
+        "submitPassword": "Tallenna muutokset"
+
     
       },  "recipeCard": {
         "ingredients": "Ainekset",
         "instructions": "Ohjeet",
-        "made_by": "Tehnyt"
+        "made_by": "Tehnyt",
+        "unknown_user": "Tuntematon"
 
-      }
+      },  "openBook": {
+        "ingredients": "Ainekset",
+        "instructions": "Ohjeet",
+        "createdBy": "Tehnyt",
+        "no_description": "Tälle reseptille ei ole annettu kuvausta.",
+        "Edit": "Muokkaa reseptiä",
+        "Delete": "Poista resepti",
+        "tooltipLike": "Kirjaudu sisään tykätäksesi reseptiä",
+        "tooltipDislike": "Kirjaudu sisään epätykätäksesi reseptiä"
     
+
+      },
+      "forgot": {
+        "password": "Unohditko salasanasi?"
+        },
+        "editRecipe": {
+          "title": "Muokkaa reseptiä",
+          "name": "Nimi",
+          "description": "Kuvaus",
+          "ingredient": "Ainekset",
+          "ingredientName": "Aineksen nimi",
+          "ingredientAmount": "Määrä",
+          "addIngredient": "Lisää ainesosa",
+          "instructions": "Ohjeet",
+          "step": "Osa {{number}}",
+          "addInstruction": "Lisää ohje",
+          "saveChanges": "Tallenna",
+          "removeInstruction": "Poista",
+          "cookTime": "Valmistusaika minuutteina",
+          "prepTime": "Preppausaika minuutteina",
+          "removeIngredient": "Poista",
+          "foodType": "Pääruokatyyppi",
+          "foodSubType": "Alatyyppi",
+          "cancel": "Palaa takaisin",
+          "dietaryPreferences": "Erikoisruokavalio",
+          "options": {
+            "selectOptions": "Valitse vaihtoehto",
+
+            "dessert": "Jälkiruoka",
+            "main-course": "Pääruoka",
+            "selectFoodType": "Valitse ruokatyyppi",
+            "appetizer": "Alkupala",
+            "breakfast": "Aamupala",
+            "side-dish": "Lisuke",
+            "pizza": "Pizza",
+            "pasta": "Pasta",
+            "beverage": "Juoma",
+            "salad": "Salaatti",
+            "Soup": "Keitto",
+            "snack": "Välipala",
+            "bread": "Leipä"
+          },
+          "ingredients": {
+            "label": "Ingredients",
+
+            "unit":{
+              "g": "g (grammoja)",
+              "kg": "kg (kilogrammoja)",
+              "oz": "oz (unsseja)",
+              "lb": "lb (pounds)",
+              "dl": "dl (desilitroja)",
+              "ml": "ml (millilitroja)",
+              "l": "l (litroja)",
+              "tbsp": "tbsp (ruokalusikallinen)",
+              "tsp": "tsp (teelusikallinen)",
+              "cup": "cup",
+              "piece": "Piece"
+            
+      
+            }
+          },
+    "foodSubTypes": {
+      "Red Meat & Ground Meat": "Punainen liha & jauheliha",
+      "Fish & Seafood": "Kala & äyriäiset",
+      "Dairy & Eggs": "Maitotuotteet & munat",
+      "Chicken & Poultry": "Kana & siipikarja",
+      "Fruits & Berries": "Hedelmät & marjat",
+      "Marinades & Sauces": "Marinadit & kastikkeet",
+      "Grains & Rice": "Jyvät & riisi"
+    },
+    "foodSubTypeItems": {
+      "Red Meat": "Punainen liha",
+      "Ground Meat": "Jauheliha",
+      "Fish": "Kala",
+      "Seafood": "Äyriäiset",
+      "Dairy": "Maitotuotteet",
+      "Eggs": "Munat",
+      "Chicken": "Kana",
+      "Poultry": "Siipikarja",
+      "Fruit": "Hedelmä",
+      "Berries": "Marjat",
+      "Marinade": "Marinadi",
+      "Sauce": "Kastike",
+      "Grain": "Jyvä",
+      "Rice": "Riisi"
+    }
+
+        },
+        "tooltip": {
+          "allowedUnits": "Sallitut syötteet: grammat, kilogrammat jne."
+        },
+        "reset" : {
+          "ResetPassword": "Nollaa salasana",
+          "NewPassword": "Uusi salasana",
+          "Submit": "Lähetä"
+        },
     
+        "forgotPassword" : {
+          "Email": "Sähköposti",
+          "Submit": "Lähetä"
+        }
+        
     
     
     
