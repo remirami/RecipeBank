@@ -125,7 +125,8 @@
           "Fruits & Berries": "Fruits & Berries",
           "Seafood": "Seafood",
           "Red Meat": "Red Meat",
-          "Ground Meat": "Ground Meat"
+          "Ground Meat": "Ground Meat",
+          "Sausage":"Sausage"
         },
 
     "backtoRecipes": "Back to recipes >"
@@ -208,6 +209,7 @@
       "Chicken & Poultry": "Chicken & Poultry",
       "Grains & Rice": "Grains & Rice",
       "Fruits & Berries": "Fruits & Berries",
+      "Sausage":"Sausage",
     "Red Meat": "Red Meat",
   "Ground Meat": "Ground Meat",
   "Marinade": "Marinade",
@@ -273,11 +275,16 @@
     "createdBy": "Created by",
     "no_description": "No description provided for this recipe.",
     "Edit": "Edit Recipe",
+    "prepTime": "Prep time",
+    "cookTime": "Cooking time",
+    "servingSize":"Serving Size",
     "Delete": "Delete Recipe",
     "tooltipLike": "Please log in to like the recipe",
     "tooltipDislike": "Please log in to dislike the recipe",
     "foodType": "Food type",
-    "dietaryPreference": "Dietary preference"
+    "dietaryPreference": "Dietary preference",
+    "category":"Category",
+    "no_servingSize": ""
 
   },
   "forgot": {
@@ -306,6 +313,11 @@
     "cookTime": "Cooking time",
     "foodSubType": "Sub type",
     "dietaryPreferences": "Dietary preferences",
+    "errors":{
+      "prepTimeInvalid":"Prepping time must be over 0 minutes.",
+      "cookTimeInvalid":"Cooking time must be over 0 minutes.",
+      "invalidFoodType": "You must choose atleast one food subtype"
+    },
     "options": {
       "selectOptions": "Select option",
       "dessert": "Dessert",
@@ -349,7 +361,8 @@
       "Chicken & Poultry": "Chicken & Poultry",
       "Fruits & Berries": "Fruits & Berries",
       "Marinades & Sauces": "Marinades & Sauces",
-      "Grains & Rice": "Grains & Rice"
+      "Grains & Rice": "Grains & Rice",
+      "Sausage": "Sausage"
     },
     "foodSubTypeItems": {
       "Red Meat": "Red Meat",
@@ -369,10 +382,7 @@
     }
 
   } ,
-   "tooltip": {
-    "allowedUnits": "Allowed units: grams, kilograms, etc."
-  }
-,"resetPassword" : {
+"resetPassword" : {
   "ResetPassword": "Reset password",
   "NewPassword": "New Password",
   "Submit": "Submit"

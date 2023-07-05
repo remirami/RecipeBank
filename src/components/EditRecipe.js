@@ -408,7 +408,7 @@ const EditRecipe = () => {
           <label className={styles.labelContainer}>
             {t("addRecipe.servingSize")}:
             <input
-              type="text"
+              type="number"
               value={servingSize}
               onChange={(event) => setServingSize(event.target.value)}
               className={styles.formElement}
@@ -690,11 +690,7 @@ const EditRecipe = () => {
                 {amountErrors[index] && (
                   <div className={styles.error}>{amountErrors[index]}</div>
                 )}
-                {displayUnits && (
-                  <div className={styles.tooltip}>
-                    {t("tooltip.allowedUnits")}
-                  </div>
-                )}
+
                 <label htmlFor={`ingredient-unit-${index}`}>
                   {t("editRecipe.ingredientUnit")}
                 </label>

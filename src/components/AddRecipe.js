@@ -13,6 +13,7 @@ const foodSubTypes = {
   "Marinades & Sauces": ["Marinade", "Sauce"],
   "Grains & Rice": ["Grain", "Rice"],
   Vegetables: [],
+  Sausage: [],
 };
 
 const AddRecipe = () => {
@@ -193,15 +194,13 @@ const AddRecipe = () => {
 
     try {
       const response = await createRecipe(recipe);
-
-      if (response.status === "success") {
-        setIsBlocking(false); // If submit is successful, set isBlocking to false
-        setError(""); // Clear the error message after successful submission
+      if (typeof response === "string") {
+        // Check if response is a string
+        console.log("Recipe created successfully with ID: ", response);
+        setIsBlocking(false);
+        setError("");
         setSuccessMessage("Recipe created successfully!");
-        console.log("New recipe created with ID:", response.data.recipeId); // Print the recipeId from response.data.recipeId
-      } else if (response.status === "error") {
-        setError(response.message); // Set the error message from the server
-        setFieldErrors(response.data); // Update the field errors from the server
+        console.log("New recipe created with ID:", response);
       }
     } catch (error) {
       console.error("Error creating recipe:", error);
@@ -453,12 +452,12 @@ const AddRecipe = () => {
         <label className={styles.labelContainer}>
           {t("addRecipe.servingSize")}:
           <input
-            type="text"
+            type="number"
             value={servingSize}
             onChange={(event) => setServingSize(event.target.value)}
             className={styles.formElement}
             placeholder="(Optional)"
-            max="50"
+            max="100"
           />
           {fieldErrors.servingSize && (
             <div className={styles.error}>{fieldErrors.servingSize}</div>
@@ -485,6 +484,7 @@ const AddRecipe = () => {
                   "Fruits & Berries",
                   "Chicken & Poultry",
                   "Vegetable",
+                  "Sausage",
                 ].map((mainType) => (
                   <option value={mainType} key={mainType}>
                     {t(`addRecipe.selectionOptions.${mainType}`)}
@@ -827,7 +827,6 @@ const AddRecipe = () => {
         >
           {t("addRecipe.instructions.addInstruction")}
         </button>
-
         <br />
         <button type="submit" className={styles.submitButton}>
           {t("addRecipe.submit")}

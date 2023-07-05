@@ -88,7 +88,8 @@
         "mustBeLoggedIn": "Sinun on kirjauduttava sisään, jotta voit lisätä reseptin.",
         "errorCreatingRecipe": "Virhe luotaessa reseptiä. Yritä uudelleen.",
         "fieldEmpty": "Tämä kenttä ei voi olla tyhjä.",
-        "nonCompatibleFoodTypes": "Ravintomielipiteitä ei voi asettaa, kun valittuna on yhteensopimattomia elintarviketyyppejä."
+        "nonCompatibleFoodTypes": "Ravintomielipiteitä ei voi asettaa, kun valittuna on yhteensopimattomia elintarviketyyppejä.",
+        "atLeastOneIngredient": "Vähintään yksi ainesosa vaaditaan!"
 
 
       },
@@ -121,7 +122,6 @@
         "Grains & Rice": "Viljat & riisi",
         "Legumes": "Palkokasvit",
         "Fruits & Berries": "Hedelmät & Marjat",
-        "Nuts": "Pähkinät",
         "Chicken & Poultry": "Kana & Linnut",
         "Beverages": "Juomat",
         "Fish": "Kala",
@@ -138,7 +138,7 @@
         "Berries": "Marjat",
         "Chicken": "Kana",
         "Poultry": "Siipikarja",
-
+        "Sausage":"Makkara",
         "Soups": "Keitot",
         "Salads": "Salaatit",
         "Breads": "Leivät",
@@ -235,7 +235,8 @@
           "Dairy & Eggs":"Maitotuotteet & Munat",
           "Chicken & Poultry":"Kana & Linnut",
           "Grains & Rice":"Viljat & riisi",
-          "Fruits & Berries":"Hedelmät & Marjat"
+          "Fruits & Berries":"Hedelmät & Marjat",
+          "Sausage":"Makkara"
         },
         "dietaryOptions": {
           "vegan": "Vegaani",
@@ -281,10 +282,19 @@
         "instructions": "Ohjeet",
         "createdBy": "Tehnyt",
         "no_description": "Tälle reseptille ei ole annettu kuvausta.",
+        "no_category": "",
+        "no_prepTime":"",
+        "no_cookTime":"",
         "Edit": "Muokkaa reseptiä",
         "Delete": "Poista resepti",
         "tooltipLike": "Kirjaudu sisään tykätäksesi reseptiä",
-        "tooltipDislike": "Kirjaudu sisään epätykätäksesi reseptiä"
+        "tooltipDislike": "Kirjaudu sisään epätykätäksesi reseptiä",
+        "prepTime": "Preppausaika minuutteina",
+        "cookTime": "Valmistusaika minuutteina",
+        "servingSize": "Annosmäärä",
+        "category":"Kategoria",
+        "dietaryPreference": "Erikoisruokavalio",
+        "foodType":"Pääruokatyyppi"
     
 
       },
@@ -311,6 +321,11 @@
           "foodSubType": "Alatyyppi",
           "cancel": "Palaa takaisin",
           "dietaryPreferences": "Erikoisruokavalio",
+          "errors":{      
+          "prepTimeInvalid":"Preppausajan tulee olla yli 0 minuuttia.",
+          "cookTimeInvalid":"Kokkausajan tulee olla yli 0 minuuttia.",
+          "invalidFoodType": "Sinun täytyy valita ainakin yksi alatyyppi"
+    },
           "options": {
             "selectOptions": "Valitse vaihtoehto",
 
@@ -354,7 +369,8 @@
       "Chicken & Poultry": "Kana & siipikarja",
       "Fruits & Berries": "Hedelmät & marjat",
       "Marinades & Sauces": "Marinadit & kastikkeet",
-      "Grains & Rice": "Jyvät & riisi"
+      "Grains & Rice": "Jyvät & riisi",
+      "Sausage": "Makkara"
     },
     "foodSubTypeItems": {
       "Red Meat": "Punainen liha",

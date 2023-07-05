@@ -132,6 +132,7 @@ const Search = () => {
           <option value="Fruits & Berries">
             {t("search.options.Fruits & Berries")}
           </option>
+          <option value="Sausage">{t("search.options.Sausage")}</option>
         </select>
 
         <select
