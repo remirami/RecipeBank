@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import styles from "./Navbar.module.css";
+import styles from "./StickyNavbar.module.css";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
