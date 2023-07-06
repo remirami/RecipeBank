@@ -16,11 +16,15 @@
   "addRecipe": {
     "title": "Add recipe",
     "name": "Name",
+    "mealType": "Meal type",
+    "type": "Category type",
     "description": "Description",
     "category": "Category",
     "servingSize": "Serving Size",
     "options": {
       "selectCategory": "Select category",
+      "selectType": "Select category type",
+      "selectMealType": "Select meal type",
       "dessert": "Dessert",
       "main-course": "Main Course",
       "appetizer": "Appetizer",
@@ -118,6 +122,7 @@
           "Red Meat & Ground Meat": "Red Meat & Ground Meat",
           "Marinades & Sauces": "Marinades & Sauces",
           "Fish & Seafood": "Fish & Seafood",
+          "Fish": "Fish",
           "Dairy & Eggs": "Dairy & Eggs",
           "Chicken & Poultry": "Chicken & Poultry",
           "Grains & Rice": "Grains & Rice",
@@ -126,7 +131,17 @@
           "Seafood": "Seafood",
           "Red Meat": "Red Meat",
           "Ground Meat": "Ground Meat",
-          "Sausage":"Sausage"
+          "Sausage":"Sausage",
+          "Dairy":"Dairy",
+          "Eggs":"Eggs",
+          "Marinade":"Marinade",
+          "Sauce":"Sauce",
+          "Grain":"Grain",
+          "Rice":"Rice",
+          "Fruit":"Fruit",
+          "Berries":"Berries",
+          "Chicken":"Chicken",
+          "Poultry":"Poultry"
         },
 
     "backtoRecipes": "Back to recipes >"
@@ -271,6 +286,8 @@
     "unknown_user": "Unknown"
   },  "openBook": {
     "ingredients": "Ingredients",
+    "mealType":"Meal type",
+    "type":"Category type",
     "instructions": "Instructions",
     "createdBy": "Created by",
     "no_description": "No description provided for this recipe.",
@@ -292,6 +309,8 @@
   },
   "editRecipe": {
     "title": "Edit Recipe",
+    "mealType":"Meal type",
+    "type":"Category type",
     "name": "Name",
     "description": "Description",
     "ingredient": "Ingredients",
@@ -320,6 +339,7 @@
     },
     "options": {
       "selectOptions": "Select option",
+      "selectType":"Select category type",
       "dessert": "Dessert",
       "main-course": "Main Course",
       "selectFoodType": "Select food type",

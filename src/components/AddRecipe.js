@@ -21,7 +21,10 @@ const AddRecipe = () => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [foodCategory, setFoodCategory] = useState({
+    mealType: "",
+    type: "",
+  });
   const [ingredients, setIngredients] = useState([
     { name: "", quantity: "", unit: "" },
   ]);
@@ -38,7 +41,10 @@ const AddRecipe = () => {
   const [fieldErrors, setFieldErrors] = useState({
     name: "",
     description: "",
-    category: "",
+    foodCategory: {
+      mealType: "",
+      type: "",
+    },
     ingredients: "",
     foodType: "",
     prepTime: "",
@@ -64,7 +70,10 @@ const AddRecipe = () => {
     const newFieldErrors = {
       name: "",
       description: "",
-      category: "",
+      foodCategory: {
+        mealType: "",
+        type: "",
+      },
       ingredients: "",
       instructions: "",
       prepTime: "",
@@ -92,8 +101,9 @@ const AddRecipe = () => {
     // Validate name, description and category
     newFieldErrors.name = validateNotEmpty(name);
     newFieldErrors.description = validateNotEmpty(description);
-    newFieldErrors.category = validateNotEmpty(category);
-
+    newFieldErrors.foodCategory.mealType = validateNotEmpty(
+      foodCategory.mealType
+    );
     ingredients.forEach((ingredient, index) => {
       const ingredientNameError = validateNotEmpty(ingredient.name);
       const ingredientQuantityError = validateNotEmpty(ingredient.quantity);
@@ -174,7 +184,10 @@ const AddRecipe = () => {
     const recipe = {
       name,
       description,
-      category,
+      foodCategory: {
+        mealType: foodCategory.mealType,
+        type: foodCategory.type,
+      },
       ingredients: ingredients.map((ingredient) => ({
         name: ingredient.name,
         quantity: ingredient.quantity,
@@ -216,7 +229,12 @@ const AddRecipe = () => {
 
     return isValid;
   };
-
+  const handleMealTypeChange = (event) => {
+    setFoodCategory({
+      ...foodCategory, // Preserve the other properties of foodCategory
+      mealType: event.target.value, // Update mealType with the new value
+    });
+  };
   const handleIngredientChange = (index, field, value) => {
     setError("");
     let updatedIngredients = [...ingredients]; // Create a copy of ingredients
@@ -288,6 +306,11 @@ const AddRecipe = () => {
     } else if (value.trim() === "") {
       if (field === "category" || field === "foodType") {
         error = "Please select a value.";
+      } else if (
+        field === "foodCategory.mealType" ||
+        field === "foodCategory.type"
+      ) {
+        error = "Please select a food category.";
       } else {
         error = t("addRecipe.errors.fieldEmpty");
       }
@@ -298,10 +321,21 @@ const AddRecipe = () => {
       error = "This field requires a positive integer value.";
     }
 
-    setFieldErrors({
-      ...fieldErrors,
-      [field]: error,
-    });
+    if (field.startsWith("foodCategory.")) {
+      const subField = field.split(".")[1];
+      setFieldErrors({
+        ...fieldErrors,
+        foodCategory: {
+          ...fieldErrors.foodCategory,
+          [subField]: error,
+        },
+      });
+    } else {
+      setFieldErrors({
+        ...fieldErrors,
+        [field]: error,
+      });
+    }
   };
   const handleAddInstruction = () => {
     if (instructions.length < 30) {
@@ -660,15 +694,15 @@ const AddRecipe = () => {
         </label>
 
         <label className={styles.labelContainer}>
-          {t("addRecipe.category")}:
+          {t("addRecipe.mealType")}:
           <select
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
+            value={foodCategory.mealType}
+            onChange={handleMealTypeChange}
             className={styles.categorySelect}
-            onBlur={(event) => handleBlur(event, "category")}
+            onBlur={(event) => handleBlur(event, "foodCategory.mealType")}
           >
-            {category === "" && (
-              <option value="">{t("addRecipe.options.selectCategory")}</option>
+            {foodCategory.mealType === "" && (
+              <option value="">{t("addRecipe.options.selectMealType")}</option>
             )}
             <option value="Dessert">{t("addRecipe.options.dessert")}</option>
             <option value="Main Course">
@@ -683,6 +717,29 @@ const AddRecipe = () => {
             <option value="Side Dish">
               {t("addRecipe.options.side-dish")}
             </option>
+          </select>
+          {fieldErrors.foodCategory?.mealType && (
+            <div className={styles.error}>
+              {fieldErrors.foodCategory.mealType}
+            </div>
+          )}
+        </label>
+        <label className={styles.labelContainer}>
+          {t("addRecipe.type")}:
+          <select
+            value={foodCategory.type}
+            onChange={(event) =>
+              setFoodCategory((prev) => ({
+                ...prev,
+                type: event.target.value,
+              }))
+            }
+            className={styles.categorySelect}
+            onBlur={(event) => handleBlur(event, "foodCategory.type")}
+          >
+            {foodCategory.type === "" && (
+              <option value="">{t("addRecipe.options.selectType")}</option>
+            )}
             <option value="Pizza">{t("addRecipe.options.pizza")}</option>
             <option value="Pasta">{t("addRecipe.options.pasta")}</option>
             <option value="Beverage">{t("addRecipe.options.beverage")}</option>
@@ -691,8 +748,8 @@ const AddRecipe = () => {
             <option value="Snack">{t("addRecipe.options.snack")}</option>
             <option value="Bread">{t("addRecipe.options.bread")}</option>
           </select>
-          {fieldErrors.category && (
-            <div className={styles.error}>{fieldErrors.category}</div>
+          {fieldErrors.foodCategory?.type && (
+            <div className={styles.error}>{fieldErrors.foodCategory.type}</div>
           )}
         </label>
         <h2>{t("addRecipe.ingredients.title")}</h2>
@@ -724,7 +781,7 @@ const AddRecipe = () => {
                 }
                 maxLength="50"
                 onBlur={(event) => {
-                  handleBlur(event, index);
+                  handleBlur(event, "ingredients[" + index + "]");
                   setDisplayUnits(false);
                 }}
                 onFocus={() => setDisplayUnits(true)}

@@ -19,9 +19,13 @@
       "description": "Kuvaus",
       "category": "Kategoria",
       "servingSize": "Annosmäärä",
-
+      "mealType": "Annostyyppi",
+      "type": "Kategoria tyyppi",
+  
       "options": {
         "selectCategory": "Valitse kategoria",
+        "selectType": "Valitse kategoriatyyppi",
+
         "dessert": "Jälkiruoka",
         "main-course": "Pääruoka",
         "appetizer": "Alkupala",
@@ -88,7 +92,7 @@
         "mustBeLoggedIn": "Sinun on kirjauduttava sisään, jotta voit lisätä reseptin.",
         "errorCreatingRecipe": "Virhe luotaessa reseptiä. Yritä uudelleen.",
         "fieldEmpty": "Tämä kenttä ei voi olla tyhjä.",
-        "nonCompatibleFoodTypes": "Ravintomielipiteitä ei voi asettaa, kun valittuna on yhteensopimattomia elintarviketyyppejä.",
+        "nonCompatibleFoodTypes": "Erikoisruokavaliota ei voi asettaa, kun valittuna on yhteensopimattomia elintarviketyyppejä.",
         "atLeastOneIngredient": "Vähintään yksi ainesosa vaaditaan!"
 
 
@@ -280,6 +284,9 @@
       },  "openBook": {
         "ingredients": "Ainekset",
         "instructions": "Ohjeet",
+        "mealType":"Ateriatyyppi",
+        "type":"Kategoriatyyppi",
+    
         "createdBy": "Tehnyt",
         "no_description": "Tälle reseptille ei ole annettu kuvausta.",
         "no_category": "",

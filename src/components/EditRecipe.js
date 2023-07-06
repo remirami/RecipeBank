@@ -9,7 +9,10 @@ const EditRecipe = () => {
   const [recipe, setRecipe] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [foodCategory, setFoodCategory] = useState({
+    mealType: "",
+    type: "",
+  });
   const [servingSize, setServingSize] = useState("");
 
   const [ingredients, setIngredients] = useState([
@@ -24,7 +27,10 @@ const EditRecipe = () => {
   const [fieldErrors, setFieldErrors] = useState({
     name: "",
     description: "",
-    category: "",
+    foodCategory: {
+      mealType: "",
+      type: "",
+    },
     ingredients: "",
     instructions: "",
     dietaryPreference: "",
@@ -65,6 +71,10 @@ const EditRecipe = () => {
           setError("You do not have permission to edit this recipe.");
           return;
         }
+        setFoodCategory({
+          mealType: data.foodCategory.mealType || "",
+          type: data.foodCategory.type || "",
+        });
         setDietaryPreference(data.dietaryPreference || "");
         setFoodType(data.foodType || []);
         setCookTime(data.cookingTime || "");
@@ -76,8 +86,10 @@ const EditRecipe = () => {
           data.ingredients || [{ name: "", quantity: 0, unit: "g" }]
         );
         setInstructions(data.instructions || []);
-        setCategory(data.category);
-        console.log(data.category);
+        setFoodCategory((prev) => ({
+          ...prev,
+          type: data.category || "",
+        }));
 
         console.log(typeof data.category);
       } catch (error) {
@@ -103,7 +115,7 @@ const EditRecipe = () => {
     const newFieldErrors = {
       name: "",
       description: "",
-      category: "",
+      foodCategory: { mealType: "", type: "" },
       ingredients: "",
       instructions: "",
       prepTime: "",
@@ -115,8 +127,10 @@ const EditRecipe = () => {
     // Validate name, description and category
     newFieldErrors.name = validateNotEmpty(name);
     newFieldErrors.description = validateNotEmpty(description);
-    newFieldErrors.category = validateNotEmpty(category);
-
+    newFieldErrors.foodCategory.mealType = validateNotEmpty(
+      foodCategory.mealType
+    );
+    newFieldErrors.foodCategory.type = validateNotEmpty(foodCategory.type);
     if (ingredients.length > 30) {
       newFieldErrors.ingredients = "You can add up to 30 ingredients only.";
       isValid = false;
@@ -215,7 +229,7 @@ const EditRecipe = () => {
     const recipe = {
       name,
       description,
-      category,
+      foodCategory,
       ingredients: ingredients.map((ingredient) => ({
         name: ingredient.name,
         quantity: ingredient.quantity,
@@ -281,13 +295,51 @@ const EditRecipe = () => {
     );
   };
 
-  const handleBlur = (event, index) => {
+  const handleBlur = (event, field) => {
     const value = event.target.value;
-    if (!validateAmount(value)) {
-      const newAmountErrors = [...amountErrors];
-      newAmountErrors[index] =
-        "Invalid amount. Please enter a number followed by a valid unit.";
-      setAmountErrors(newAmountErrors);
+    let error = "";
+
+    if (field === "ingredients" || field === "instructions") {
+      if (!Array.isArray(value) || value.length === 0) {
+        error = "This field cannot be empty.";
+      }
+    } else if (value.trim() === "") {
+      if (field === "category" || field === "foodType") {
+        error = "Please select a value.";
+      } else if (
+        field === "foodCategory.mealType" ||
+        field === "foodCategory.type"
+      ) {
+        error = "Please select a food category.";
+      } else if (field !== "servingSize") {
+        error = "This field cannot be empty.";
+      }
+    } else if (
+      (field === "prepTime" || field === "cookTime") &&
+      (!Number.isInteger(Number(value)) || Number(value) <= 0)
+    ) {
+      error = "This field requires a positive integer value.";
+    } else if (
+      field === "servingSize" &&
+      (Number(value) <= 0 || Number(value) > 100)
+    ) {
+      error = "Serving size must be a positive number and not exceed 100.";
+    }
+
+    if (field.startsWith("foodCategory.")) {
+      const subField = field.split(".")[1];
+      setFieldErrors({
+        ...fieldErrors,
+        foodCategory: {
+          ...fieldErrors.foodCategory,
+          [subField]: error,
+        },
+      });
+    } else {
+      setFieldErrors({
+        ...fieldErrors,
+        [field]: error,
+      });
     }
   };
 
@@ -372,6 +424,7 @@ const EditRecipe = () => {
             className={styles.inputField}
             type="text"
             value={name}
+            onBlur={(event) => handleBlur(event, "name")}
             onChange={(e) => setName(e.target.value)}
             maxLength="50"
           />
@@ -389,9 +442,9 @@ const EditRecipe = () => {
             type="number"
             id="prepTime"
             value={prepTime}
+            onBlur={(event) => handleBlur(event, "prepTime")}
             onChange={handlePrepTimeChange}
           />
-
           {fieldErrors.prepTime && (
             <div className={styles.error}>{fieldErrors.prepTime}</div>
           )}
@@ -400,6 +453,7 @@ const EditRecipe = () => {
             type="number"
             id="cookTime"
             value={cookTime}
+            onBlur={(event) => handleBlur(event, "cookTime")}
             onChange={handleCookTimeChange}
           />
           {fieldErrors.cookTime && (
@@ -419,7 +473,6 @@ const EditRecipe = () => {
               <div className={styles.error}>{fieldErrors.servingSize}</div>
             )}
           </label>
-
           {foodType.map((type, index) => (
             <div key={index}>
               <label className={styles.labelContainer}>
@@ -427,6 +480,7 @@ const EditRecipe = () => {
                 <select
                   value={type.mainType}
                   onChange={(event) => handleMainFoodTypeChange(index, event)}
+                  onBlur={(event) => handleBlur(event, "foodType")}
                   className={styles.foodTypeSelect}
                 >
                   <option value="">
@@ -614,15 +668,21 @@ const EditRecipe = () => {
           </label>
           <label htmlFor="ingredients">{t("editRecipe.ingredient")}</label>
           <label className={styles.labelContainer}>
-            {t("addRecipe.category")}:
+            {t("editRecipe.mealType")}:
             <select
-              value={category}
-              onChange={(event) => setCategory(event.target.value)}
+              value={foodCategory.mealType}
+              onChange={(event) =>
+                setFoodCategory((prev) => ({
+                  ...prev,
+                  mealType: event.target.value,
+                }))
+              }
               className={styles.categorySelect}
+              onBlur={(event) => handleBlur(event, "foodCategory.mealType")}
             >
-              {category === "" && (
+              {foodCategory.mealType === "" && (
                 <option value="">
-                  {t("editRecipe.options.selectCategory")}
+                  {t("editRecipe.options.selectMealType")}
                 </option>
               )}
               <option value="Dessert">{t("editRecipe.options.dessert")}</option>
@@ -638,6 +698,29 @@ const EditRecipe = () => {
               <option value="Side Dish">
                 {t("editRecipe.options.side-dish")}
               </option>
+            </select>
+            {fieldErrors.foodCategory?.mealType && (
+              <div className={styles.error}>
+                {fieldErrors.foodCategory.mealType}
+              </div>
+            )}
+          </label>
+          <label className={styles.labelContainer}>
+            {t("editRecipe.type")}:
+            <select
+              value={foodCategory.type}
+              onChange={(event) =>
+                setFoodCategory((prev) => ({
+                  ...prev,
+                  type: event.target.value,
+                }))
+              }
+              className={styles.categorySelect}
+              onBlur={(event) => handleBlur(event, "foodCategory.type")}
+            >
+              {foodCategory.type === "" && (
+                <option value="">{t("editRecipe.options.selectType")}</option>
+              )}
               <option value="Pizza">{t("editRecipe.options.pizza")}</option>
               <option value="Pasta">{t("editRecipe.options.pasta")}</option>
               <option value="Beverage">
@@ -648,8 +731,10 @@ const EditRecipe = () => {
               <option value="Snack">{t("editRecipe.options.snack")}</option>
               <option value="Bread">{t("editRecipe.options.bread")}</option>
             </select>
-            {fieldErrors.category && (
-              <div className={styles.error}>{fieldErrors.category}</div>
+            {fieldErrors.foodCategory?.type && (
+              <div className={styles.error}>
+                {fieldErrors.foodCategory.type}
+              </div>
             )}
           </label>
           <label htmlFor="ingredients">
@@ -665,6 +750,7 @@ const EditRecipe = () => {
                   type="text"
                   id={`ingredient-name-${index}`}
                   value={ingredient.name}
+                  onBlur={(event) => handleBlur(event, "ingredient")}
                   onChange={(e) =>
                     handleIngredientChange(index, "name", e.target.value)
                   }
@@ -682,7 +768,7 @@ const EditRecipe = () => {
                   }
                   maxLength="30"
                   onBlur={(event) => {
-                    handleBlur(event, index);
+                    handleBlur(event, "quantity");
                     setDisplayUnits(false);
                   }}
                   onFocus={() => setDisplayUnits(true)}

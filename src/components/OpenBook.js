@@ -79,8 +79,12 @@ const OpenBook = ({
             {getFoodTypeString(recipe.foodType)}
           </p>
           <p>
-            <strong>{t("openBook.category")}:</strong>{" "}
-            {recipe.category || t("openBook.no_category")}
+            <strong>{t("openBook.mealType")}:</strong>{" "}
+            {recipe.foodCategory.mealType || t("openBook.no_mealType")}
+          </p>
+          <p>
+            <strong>{t("openBook.type")}:</strong>{" "}
+            {recipe.foodCategory.type || t("openBook.no_type")}
           </p>
           <p>
             <strong>{t("openBook.dietaryPreference")}:</strong>{" "}
