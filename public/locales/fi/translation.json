@@ -61,7 +61,15 @@
           "tbsp": "tbsp (ruokalusikallinen)",
           "tsp": "tsp (teelusikallinen)",
           "cup": "kuppi",
-          "piece": "kpl"
+          "piece": "kpl",
+          "pinch": "hyppysellinen",
+          "clove": "kynsi",
+          "gallon": "gallona",
+          "fluid ounce": "fluid ounce",
+          "bunch": "ruukku",
+          "sprig":"oksa"
+  
+
         }    
       },
         "instructions": {
@@ -74,6 +82,10 @@
       "submit": "Lähetä",
       "errors": {
         "nameRequired": "Nimikenttä vaaditaan!",
+        "selectValue": "Valitse pääruokatyyppi",
+        "foodCategor": "Valitse ruokakategoria",
+        "positiveInteger": "Ajan tulee olla yli 0 minuuttia",
+
         "descriptionRequired": "Anna reseptille kuvaus",
         "categoryRequired": "Aseta reseptille kategoria",
         "ingredientsRequired": "Aseta vähintään yksi ainesosa",
@@ -240,7 +252,10 @@
           "Chicken & Poultry":"Kana & Linnut",
           "Grains & Rice":"Viljat & riisi",
           "Fruits & Berries":"Hedelmät & Marjat",
-          "Sausage":"Makkara"
+          "Sausage":"Makkara",
+          "Fish": "Kala",
+          "Seafood": "Äyriäiset"
+        
         },
         "dietaryOptions": {
           "vegan": "Vegaani",
@@ -292,6 +307,7 @@
         "no_category": "",
         "no_prepTime":"",
         "no_cookTime":"",
+        "no_dietaryPreference": "",
         "Edit": "Muokkaa reseptiä",
         "Delete": "Poista resepti",
         "tooltipLike": "Kirjaudu sisään tykätäksesi reseptiä",
@@ -301,7 +317,33 @@
         "servingSize": "Annosmäärä",
         "category":"Kategoria",
         "dietaryPreference": "Erikoisruokavalio",
-        "foodType":"Pääruokatyyppi"
+        "foodType":"Pääruokatyyppi",
+        "selectionOptions": {
+          "Main Course": "Pääruoka",
+          "Appetizer": "Alkupala",
+          "Side Dish": "Lisuke",
+          "Breakfast": "Aamupala",
+          "Dessert": "Jälkiruoka",
+          "pizza": "Pizza",
+          "pasta": "Pasta",
+          "beverage": "Juoma",
+          "salad": "Salaatti",
+          "Soup": "Keitto",
+          "snack": "Välipala",
+          "bread": "Leipä",
+          "vegetarian": "Kasvis",
+          "vegan": "Vegaani",
+          "glutenFree": "Gluteeniton",
+          "lowFat": "Vähärasvainen",
+          "eggFree": "Kananmunaton",
+          "lowCarb": "Vähähiilihydraattinen",
+          "dairyFree": "Maidoton",
+          "lowSodium": "Vähäsuolainen",
+        "lowSugar": "Vähäsokerinen",
+        "lactoseIntolerant": "Laktoositon",
+        "paleo": "Paleo"
+  
+        }
     
 
       },
@@ -364,7 +406,12 @@
               "tbsp": "tbsp (ruokalusikallinen)",
               "tsp": "tsp (teelusikallinen)",
               "cup": "kuppi",
-              "piece": "kpl"
+              "piece": "kpl",
+              "clove": "kynsi",
+              "gallon": "gallona",
+              "fluidounce": "fluid ounce",
+              "bunch": "ruukku",
+              "sprig": "oksa"
             
       
             }

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [cookTime, setCookTime] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -26,25 +27,49 @@ const Search = () => {
   const { t } = useTranslation();
 
   const handleSearch = async () => {
-    const results = await searchRecipes(
+    const response = await searchRecipes(
       searchTerm,
       selectedCategory,
       searchByLikes,
       foodType,
       subType,
-      dietaryPreferences
+      dietaryPreferences,
+      cookTime
     );
-    setSearchResults(results);
+
+    if (response && response.data && response.data.recipes) {
+      setSearchResults(response.data.recipes);
+    } else {
+      console.error(
+        "searchRecipes response does not contain data.recipes property",
+        response
+      );
+      setSearchResults([]); // Use an empty array as a fallback
+    }
+
     setSearchPerformed(true);
   };
   const handleCheckboxChange = (event) => {
     setSearchByLikes(event.target.checked);
   };
+  const handleCookTimeInput = (event) => {
+    // Allow only numbers
+    const re = /^[0-9\b]+$/;
 
-  const handleSearchInput = (event) => {
-    setSearchTerm(event.target.value);
+    // if value is not blank, then test the regex
+    if (event.target.value === "" || re.test(event.target.value)) {
+      setCookTime(event.target.value);
+    }
   };
+  const handleSearchInput = (event) => {
+    let searchTerm = event.target.value;
+    // Trim leading/trailing whitespace and convert to lowercase
+    searchTerm = searchTerm.trim().toLowerCase();
+    // Remove any special characters to prevent injection attacks
+    searchTerm = searchTerm.replace(/[^a-z0-9 ]/gi, "");
 
+    setSearchTerm(searchTerm);
+  };
   const handleSearchKeyDown = (event) => {
     if (event.key === "Enter") {
       handleSearch();
@@ -275,6 +300,13 @@ const Search = () => {
           <label className={styles.checkboxLabel}>
             {t("search.search_by_likes")}
           </label>
+          <input
+            className={styles.searchInput}
+            type="number"
+            placeholder={t("search.cookTime_placeholder")}
+            value={cookTime}
+            onChange={handleCookTimeInput}
+          />
         </div>
         <button onClick={handleSearch} className={styles.searchButton}>
           {t("search.search_button")}

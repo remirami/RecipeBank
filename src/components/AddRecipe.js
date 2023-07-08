@@ -220,15 +220,7 @@ const AddRecipe = () => {
       setError("Error creating recipe. Please try again.");
     }
   };
-  const validateAmount = (value) => {
-    console.log("ValidateAmount called with value: ", value);
 
-    // Check if value is a positive floating-point number or zero
-    const regex = /^\d*\.?\d+$/;
-    const isValid = regex.test(value);
-
-    return isValid;
-  };
   const handleMealTypeChange = (event) => {
     setFoodCategory({
       ...foodCategory, // Preserve the other properties of foodCategory
@@ -241,16 +233,18 @@ const AddRecipe = () => {
     let ingredient = { ...updatedIngredients[index] }; // Create a copy of specific ingredient
 
     if (field === "quantity") {
-      const numberPart = value.replace(/[^0-9.]/g, "");
-      let quantityNumber = parseFloat(numberPart);
-      ingredient.quantity = isNaN(quantityNumber) ? 0 : quantityNumber; // Parse to float and update quantity of ingredient
-
-      const isValidAmount = validateAmount(ingredient.quantity);
-      const newAmountErrors = [...amountErrors];
-      newAmountErrors[index] = isValidAmount
-        ? ""
-        : "Invalid amount. Please use a valid number.";
-      setAmountErrors(newAmountErrors);
+      // check if value is a valid decimal number with at most 1 digit after the point
+      const isValid = /^\d*\.?\d{0,1}$/.test(value);
+      if (isValid) {
+        ingredient.quantity = value;
+        const newAmountErrors = [...amountErrors];
+        newAmountErrors[index] = "";
+        setAmountErrors(newAmountErrors);
+      } else {
+        const newAmountErrors = [...amountErrors];
+        newAmountErrors[index] = "Invalid amount. Please use a valid number.";
+        setAmountErrors(newAmountErrors);
+      }
     } else if (field === "name") {
       ingredient.name = value;
     } else if (field === "unit") {
@@ -275,7 +269,7 @@ const AddRecipe = () => {
       return;
     }
     setError("");
-    setIngredients([...ingredients, { name: "", quantity: 0, unit: "g" }]);
+    setIngredients([...ingredients, { name: "", quantity: "", unit: "g" }]);
   };
   useEffect(() => {
     console.log(ingredients);
@@ -305,12 +299,12 @@ const AddRecipe = () => {
       }
     } else if (value.trim() === "") {
       if (field === "category" || field === "foodType") {
-        error = "Please select a value.";
+        error = t("addRecipe.errors.selectValue");
       } else if (
         field === "foodCategory.mealType" ||
         field === "foodCategory.type"
       ) {
-        error = "Please select a food category.";
+        error = t("addRecipe.errors.foodCategor");
       } else {
         error = t("addRecipe.errors.fieldEmpty");
       }
@@ -318,7 +312,7 @@ const AddRecipe = () => {
       (field === "prepTime" || field === "cookTime") &&
       (!Number.isInteger(Number(value)) || Number(value) <= 0)
     ) {
-      error = "This field requires a positive integer value.";
+      error = t("addRecipe.errors.positiveInteger");
     }
 
     if (field.startsWith("foodCategory.")) {
@@ -812,8 +806,16 @@ const AddRecipe = () => {
                 <option value="dl">{t("addRecipe.ingredients.unit.dl")}</option>
                 <option value="ml">{t("addRecipe.ingredients.unit.ml")}</option>
                 <option value="l">{t("addRecipe.ingredients.unit.l")}</option>
+                <option value="pinch">
+                  {t("addRecipe.ingredients.unit.pinch")}
+                </option>
+
                 <option value="tbsp">
                   {t("addRecipe.ingredients.unit.tbsp")}
+                </option>
+
+                <option value="clove">
+                  {t("addRecipe.ingredients.unit.clove")}
                 </option>
                 <option value="tsp">
                   {t("addRecipe.ingredients.unit.tsp")}
@@ -823,6 +825,15 @@ const AddRecipe = () => {
                 </option>
                 <option value="piece">
                   {t("addRecipe.ingredients.unit.piece")}
+                </option>
+                <option value="gallon">
+                  {t("addRecipe.ingredients.unit.gallon")}
+                </option>
+                <option value="fluid ounce">
+                  {t("addRecipe.ingredients.unit.fluidounce")}
+                </option>
+                <option value="bunch">
+                  {t("addRecipe.ingredients.unit.bunch")}
                 </option>
               </select>
               {fieldErrors.unit && (
@@ -859,7 +870,7 @@ const AddRecipe = () => {
                 value={instruction}
                 onChange={(event) => handleInstructionChange(event, index)}
                 onBlur={(event) => handleBlur(event, "instruction")}
-                maxLength="60"
+                maxLength="70"
               />
               {fieldErrors.instruction && (
                 <div className={styles.error}>{fieldErrors.instruction}</div>

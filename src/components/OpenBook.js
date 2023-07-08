@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styles from "./OpenBook.module.css";
 import { useTranslation } from "react-i18next";
-import Modal from "react-modal";
 
 const OpenBook = ({
   recipe,
@@ -53,15 +52,20 @@ const OpenBook = ({
   console.log("Dietary Preference:", recipe.dietaryPreference);
   console.log("Type of Dietary Preference:", typeof recipe.dietaryPreference);
   console.log("Ingredients:", recipe.ingredients);
+
   const getFoodTypeString = (foodTypeArray) => {
     if (!foodTypeArray || !Array.isArray(foodTypeArray)) return ""; // If foodTypeArray is null or undefined or not an array
     return foodTypeArray
       .map((foodType) => {
-        let result = foodType.mainType || "";
-        if (foodType.contains) {
-          result += `: ${foodType.contains.join(", ")}`;
-        }
-        return result;
+        let mainType = foodType.mainType
+          ? t(`addRecipe.selectionOptions.${foodType.mainType}`)
+          : "";
+        let contains = foodType.contains
+          ? foodType.contains.map((type) =>
+              t(`addRecipe.selectionOptions.${type}`)
+            )
+          : [];
+        return `${mainType} ${contains.join(", ")}`;
       })
       .join(", ");
   };
@@ -70,7 +74,7 @@ const OpenBook = ({
     <div className={styles.bookContainer}>
       <div className={styles.openBook}>
         <div className={styles.leftPage}>
-          <h2>{recipe.name}</h2>
+          <h2 className={styles.recipeTitle}>{recipe.name}</h2>{" "}
           <p className={styles.recipeDescription}>
             {recipe.description || t("openBook.no_description")}
           </p>
@@ -80,26 +84,30 @@ const OpenBook = ({
           </p>
           <p>
             <strong>{t("openBook.mealType")}:</strong>{" "}
-            {recipe.foodCategory.mealType || t("openBook.no_mealType")}
+            {t(`openBook.selectionOptions.${recipe.foodCategory.mealType}`) ||
+              t("openBook.no_mealType")}
           </p>
           <p>
             <strong>{t("openBook.type")}:</strong>{" "}
-            {recipe.foodCategory.type || t("openBook.no_type")}
+            {t(`openBook.selectionOptions.${recipe.foodCategory.type}`) ||
+              t("openBook.no_type")}{" "}
           </p>
           <p>
             <strong>{t("openBook.dietaryPreference")}:</strong>{" "}
-            {recipe.dietaryPreference}
+            {recipe.dietaryPreference &&
+            t(`openBook.selectionOptions.${recipe.dietaryPreference}`) !==
+              `openBook.selectionOptions.${recipe.dietaryPreference}`
+              ? t(`openBook.selectionOptions.${recipe.dietaryPreference}`)
+              : t("openBook.no_dietaryPreference")}{" "}
           </p>
           <p>
             <strong>{t("openBook.prepTime")}:</strong>{" "}
             {recipe.prepTime || t("openBook.no_prepTime")}
           </p>
-
           <p>
             <strong>{t("openBook.cookTime")}:</strong>{" "}
             {recipe.cookTime || t("openBook.no_cookTime")}
           </p>
-
           <p>
             <strong>{t("openBook.servingSize")}:</strong>{" "}
             {recipe.servingSize || t("openBook.no_servingSize")}

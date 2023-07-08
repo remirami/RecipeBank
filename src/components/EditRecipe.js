@@ -9,10 +9,7 @@ const EditRecipe = () => {
   const [recipe, setRecipe] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [foodCategory, setFoodCategory] = useState({
-    mealType: "",
-    type: "",
-  });
+  const [foodCategory, setFoodCategory] = useState({ mealType: "", type: "" });
   const [servingSize, setServingSize] = useState("");
 
   const [ingredients, setIngredients] = useState([
@@ -20,7 +17,7 @@ const EditRecipe = () => {
   ]);
   const [instructions, setInstructions] = useState([]);
   const [dietaryPreference, setDietaryPreference] = useState([]);
-  const [foodType, setFoodType] = useState([{ mainType: "", contains: [] }]);
+  const [foodType, setFoodType] = useState([{ mainType: "", subType: [] }]);
   const [cookTime, setCookTime] = useState("");
   const [prepTime, setPrepTime] = useState("");
 
@@ -76,21 +73,21 @@ const EditRecipe = () => {
           type: data.foodCategory.type || "",
         });
         setDietaryPreference(data.dietaryPreference || "");
-        setFoodType(data.foodType || []);
-        setCookTime(data.cookingTime || "");
-
+        setCookTime(data.cookTime || "");
+        setPrepTime(data.prepTime || "");
+        setFoodType(data.foodType || [{ mainType: "", subType: [] }]);
+        setServingSize(data.servingSize || "");
         setRecipe(data);
         setName(data.name);
         setDescription(data.description);
         setIngredients(
-          data.ingredients || [{ name: "", quantity: 0, unit: "g" }]
+          data.ingredients || [{ name: "", quantity: "", unit: "g" }]
         );
         setInstructions(data.instructions || []);
-        setFoodCategory((prev) => ({
-          ...prev,
-          type: data.category || "",
-        }));
-
+        setFoodCategory({
+          mealType: data.foodCategory.mealType || "",
+          type: data.foodCategory.type || "",
+        });
         console.log(typeof data.category);
       } catch (error) {
         console.error("Error fetching recipe data:", error);
@@ -191,8 +188,8 @@ const EditRecipe = () => {
         if (
           typeof foodType[i].mainType !== "string" ||
           foodType[i].mainType.trim() === "" ||
-          !Array.isArray(foodType[i].contains) ||
-          foodType[i].contains.length === 0
+          !Array.isArray(foodType[i].subType) ||
+          foodType[i].subType.length === 0
         ) {
           newFieldErrors.foodType = t("editRecipe.errors.invalidFoodType");
           isValid = false;
@@ -266,8 +263,7 @@ const EditRecipe = () => {
 
     if (field === "quantity") {
       const numberPart = value.replace(/[^0-9.]/g, "");
-      let quantityNumber = parseFloat(numberPart);
-      ingredient.quantity = isNaN(quantityNumber) ? 0 : quantityNumber; // Parse to float and update quantity of ingredient
+      ingredient.quantity = numberPart; // Keep as string
 
       const isValidAmount = validateAmount(ingredient.quantity);
       const newAmountErrors = [...amountErrors];
@@ -353,7 +349,7 @@ const EditRecipe = () => {
     return isValid;
   };
   const addIngredient = () => {
-    setIngredients([...ingredients, { name: "", quantity: 0, unit: "g" }]);
+    setIngredients([...ingredients, { name: "", quantity: "", unit: "g" }]);
   };
 
   const removeIngredient = (index) => {
@@ -393,20 +389,19 @@ const EditRecipe = () => {
 
   const handleSubTypeChange = (index, subType, isChecked) => {
     const newFoodType = [...foodType];
-    if (!newFoodType[index].contains) {
-      newFoodType[index].contains = [];
+    if (!newFoodType[index].subType) {
+      newFoodType[index].subType = [];
     }
     if (isChecked) {
-      newFoodType[index].contains.push(subType);
+      newFoodType[index].subType.push(subType);
     } else {
-      const subTypeIndex = newFoodType[index].contains.indexOf(subType);
+      const subTypeIndex = newFoodType[index].subType.indexOf(subType);
       if (subTypeIndex > -1) {
-        newFoodType[index].contains.splice(subTypeIndex, 1);
+        newFoodType[index].subType.splice(subTypeIndex, 1);
       }
     }
     setFoodType(newFoodType);
   };
-
   const handleCookTimeChange = (e) => {
     const time = parseInt(e.target.value, 10);
     if (!isNaN(time) && /^[0-9]*$/.test(time)) {
@@ -503,8 +498,8 @@ const EditRecipe = () => {
                           type="checkbox"
                           value={subType}
                           checked={
-                            type.contains
-                              ? type.contains.includes(subType)
+                            type.subType
+                              ? type.subType.includes(subType)
                               : false
                           }
                           onChange={(event) =>
@@ -535,6 +530,7 @@ const EditRecipe = () => {
                   id="vegan"
                   name="dietaryPreference"
                   value="Vegan"
+                  checked={dietaryPreference.includes("Vegan")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="vegan">
@@ -546,6 +542,7 @@ const EditRecipe = () => {
                   id="vegetarian"
                   name="dietaryPreference"
                   value="Vegetarian"
+                  checked={dietaryPreference.includes("Vegetarian")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="vegetarian">
@@ -557,6 +554,7 @@ const EditRecipe = () => {
                   id="glutenFree"
                   name="dietaryPreference"
                   value="Gluten-free"
+                  checked={dietaryPreference.includes("Gluten-free")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="glutenFree">
@@ -568,6 +566,7 @@ const EditRecipe = () => {
                   id="dairyFree"
                   name="dietaryPreference"
                   value="Dairy-free"
+                  checked={dietaryPreference.includes("Dairy-free")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="dairyFree">
@@ -579,6 +578,7 @@ const EditRecipe = () => {
                   id="paleo"
                   name="dietaryPreference"
                   value="Paleo"
+                  checked={dietaryPreference.includes("Paleo")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="paleo">
@@ -590,6 +590,7 @@ const EditRecipe = () => {
                   id="keto"
                   name="dietaryPreference"
                   value="Keto"
+                  checked={dietaryPreference.includes("Keto")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="keto">
@@ -601,6 +602,7 @@ const EditRecipe = () => {
                   id="lowCarb"
                   name="dietaryPreference"
                   value="Low-carb"
+                  checked={dietaryPreference.includes("Low-carb")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="lowCarb">
@@ -612,6 +614,7 @@ const EditRecipe = () => {
                   id="lowFat"
                   name="dietaryPreference"
                   value="Low-fat"
+                  checked={dietaryPreference.includes("Low-fat")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="lowFat">
@@ -623,6 +626,7 @@ const EditRecipe = () => {
                   id="lowSodium"
                   name="dietaryPreference"
                   value="Low-sodium"
+                  checked={dietaryPreference.includes("Low-sodium")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="lowSodium">
@@ -634,6 +638,7 @@ const EditRecipe = () => {
                   id="sugarFree"
                   name="dietaryPreference"
                   value="Sugar-free"
+                  checked={dietaryPreference.includes("Sugar-free")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="lowSugar">
@@ -645,6 +650,7 @@ const EditRecipe = () => {
                   id="lactoseIntolerant"
                   name="dietaryPreference"
                   value="Lactose-intolerant"
+                  checked={dietaryPreference.includes("Lactose-intolerant")}
                   onChange={handleDietaryPreferencesChange}
                 />
                 <label htmlFor="lactoseIntolerant">
@@ -656,6 +662,7 @@ const EditRecipe = () => {
                   id="eggFree"
                   name="dietaryPreference"
                   value="Egg-free"
+                  checked={dietaryPreference.includes("Egg-free")}
                   onChange={handleDietaryPreferencesChange}
                 />
               </label>
@@ -825,6 +832,18 @@ const EditRecipe = () => {
                   <option value="piece">
                     {t("editRecipe.ingredients.unit.piece")}
                   </option>
+                  <option value="clove">
+                    {t("editRecipe.ingredients.unit.clove")}
+                  </option>
+                  <option value="gallon">
+                    {t("editRecipe.ingredients.unit.gallon")}
+                  </option>
+                  <option value="fluidounce">
+                    {t("editRecipe.ingredients.unit.fluidounce")}
+                  </option>
+                  <option value="bunch">
+                    {t("editRecipe.ingredients.unit.bunch")}
+                  </option>
                 </select>
                 {fieldErrors[index] && (
                   <div className={styles.error}>{fieldErrors[index]}</div>
@@ -857,6 +876,7 @@ const EditRecipe = () => {
                   type="text"
                   id={`instruction-${index}`}
                   value={instruction}
+                  maxLength="70"
                   onChange={(e) => {
                     const updatedInstructions = [...instructions];
                     updatedInstructions[index] = e.target.value;

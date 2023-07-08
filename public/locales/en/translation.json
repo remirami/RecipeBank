@@ -61,7 +61,14 @@
         "tbsp": "tbsp (tablespoons)",
         "tsp": "tsp (teaspoons)",
         "cup": "cup",
-        "piece": "piece"
+        "piece": "piece",
+        "clove": "clove",
+        "pinch":"pinch",
+        "gallon": "gallon",
+        "fluidounce": "fluid ounce",
+        "bunch": "bunch",
+        "sprig": "sprig"
+
       }    
     },
     "instructions": {
@@ -91,6 +98,9 @@
       "maxIngredients": "You can add up to 30 ingredients only.",
       "maxInstructions": "You can add up to 30 instructions only.",
       "recipeExists": "A recipe with this name already exists.",
+      "selectValue": "Please select main foodtype",
+      "foodCategor": "Please select a food category",
+      "positiveInteger": "Time must be over 0 minutes",
       "userNotLoggedIn": "User is not logged in.",
       "mustBeLoggedIn": "You must be logged in to add a recipe.",
       "errorCreatingRecipe": "Error creating recipe. Please try again.",
@@ -301,7 +311,10 @@
     "foodType": "Food type",
     "dietaryPreference": "Dietary preference",
     "category":"Category",
-    "no_servingSize": ""
+    "no_servingSize": "",
+    "selectionOptions": {
+      "main-course": "Main Course"
+    }
 
   },
   "forgot": {
@@ -355,24 +368,8 @@
       "bread": "Bread"
     },
     "ingredients": {
-      "label": "Ingredients",
+      "label": "Ingredients"
 
-      "unit":{
-        "g": "Grams",
-        "kg": "Kilogram",
-        "oz": "Oz",
-        "ounce": "Ounce",
-        "lb": "Pound",
-        "dl": "Deciliter",
-        "ml": "Milliliter",
-        "l": "Liter",
-        "tbsp": "Tablespoon",
-        "tsp": "Teaspoon",
-        "cup": "Cup",
-        "piece": "Piece"
-      
-
-      }
     },
     "foodSubTypes": {
       "Red Meat & Ground Meat": "Red Meat & Ground Meat",

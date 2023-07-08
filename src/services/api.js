@@ -145,14 +145,34 @@ export async function getRandomRecipe() {
 export async function searchRecipes(
   searchTerm,
   category,
-  searchByLikes = false
+  searchByLikes = false,
+  foodType,
+  subType,
+  dietaryPreferences,
+  includeLiked,
+  cookTime
 ) {
-  const response = await api.get("/search", {
-    params: { searchTerm, category, searchByLikes, searchByUsername: true },
-  });
-  return response.data;
+  try {
+    const response = await api.get("/search", {
+      params: {
+        searchTerm,
+        category,
+        searchByLikes,
+        searchByUsername: true,
+        foodType,
+        subType,
+        dietaryPreference: dietaryPreferences,
+        includeLiked,
+        cookTime,
+      },
+    });
+    console.log("Server response: ", response);
+    return response.data;
+  } catch (error) {
+    console.error("There was an error in the searchRecipes function: ", error);
+    return { recipes: [] };
+  }
 }
-
 export async function confirmUserEmail(token) {
   const response = await api.get(`/confirm-email/${token}`);
   return response.data;

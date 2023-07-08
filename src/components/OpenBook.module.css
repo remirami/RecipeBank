@@ -190,6 +190,10 @@
     position: relative;
     z-index: 1;
   }
+  .recipeTitle {
+    text-decoration: underline;
+    text-transform: capitalize; 
+  }
   .recipeDescription {
     font-size: 1.2rem;
     color: #666;
