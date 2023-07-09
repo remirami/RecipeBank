@@ -15,6 +15,7 @@
   "logged_out": "Logged out",
   "addRecipe": {
     "title": "Add recipe",
+    "groupTitle": "Food Group title",
     "name": "Name",
     "mealType": "Meal type",
     "type": "Category type",
@@ -42,6 +43,8 @@
     "ingredients": {
       "ingredients": "Ingredients",
       "title": "Ingredients",
+      "addGroup": "Add food group",
+
       "name": "Name",
       "amount": "Amount",
       "remove": "Remove",
@@ -67,7 +70,9 @@
         "gallon": "gallon",
         "fluidounce": "fluid ounce",
         "bunch": "bunch",
-        "sprig": "sprig"
+        "sprig": "sprig",
+        "can": "can"
+
 
       }    
     },

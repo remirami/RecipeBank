@@ -25,8 +25,8 @@ const AddRecipe = () => {
     mealType: "",
     type: "",
   });
-  const [ingredients, setIngredients] = useState([
-    { name: "", quantity: "", unit: "" },
+  const [ingredientGroups, setIngredientGroups] = useState([
+    { title: "", ingredients: [{ name: "", quantity: "", unit: "" }] },
   ]);
   const [instructions, setInstructions] = useState([]);
 
@@ -36,7 +36,9 @@ const AddRecipe = () => {
   const [foodType, setFoodType] = useState([{ mainType: "", contains: [] }]);
   const [dietaryPreference, setDietaryPreference] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
-  const [amountErrors, setAmountErrors] = useState([]);
+  const [amountErrors, setAmountErrors] = useState("");
+  const [ingredientNameErrors, setIngredientNameErrors] = useState([]);
+  const [ingredientQuantityErrors, setIngredientQuantityErrors] = useState([]);
   const [displayUnits, setDisplayUnits] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({
     name: "",
@@ -45,11 +47,22 @@ const AddRecipe = () => {
       mealType: "",
       type: "",
     },
-    ingredients: "",
+    ingredientGroups: [
+      {
+        title: "",
+        ingredients: [
+          {
+            name: "",
+            quantity: "",
+            unit: "",
+          },
+        ],
+      },
+    ],
     foodType: "",
     prepTime: "",
     cookTime: "",
-    dietaryPreference: "",
+    dietaryPreference: [""],
     instructions: "",
   });
   const [error, setError] = useState("");
@@ -57,7 +70,10 @@ const AddRecipe = () => {
   const [isBlocking, setIsBlocking] = useState(false);
 
   function validateNotEmpty(field) {
-    if (typeof field === "string" && field.trim() === "") {
+    if (
+      field === undefined ||
+      (typeof field === "string" && field.trim() === "")
+    ) {
       return t("addRecipe.validation.fieldRequired");
     }
     return "";
@@ -74,7 +90,7 @@ const AddRecipe = () => {
         mealType: "",
         type: "",
       },
-      ingredients: "",
+      ingredientGroups: [],
       instructions: "",
       prepTime: "",
       cookTime: "",
@@ -82,7 +98,6 @@ const AddRecipe = () => {
       foodType: "",
       dietaryPreference: "",
     };
-
     if (servingSize) {
       // Only validate if servingSize is not empty
       if (!Number.isInteger(Number(servingSize)) || Number(servingSize) <= 0) {
@@ -90,8 +105,13 @@ const AddRecipe = () => {
         isValid = false;
       }
     }
-    if (ingredients.length > 30) {
-      newFieldErrors.ingredients = t("addRecipe.errors.maxIngredients");
+    let totalIngredients = 0;
+    ingredientGroups.forEach((group) => {
+      totalIngredients += group.ingredients.length;
+    });
+
+    if (totalIngredients > 30) {
+      newFieldErrors.ingredientGroups = t("addRecipe.errors.maxIngredients");
       isValid = false;
     }
     if (instructions.length > 30) {
@@ -104,16 +124,45 @@ const AddRecipe = () => {
     newFieldErrors.foodCategory.mealType = validateNotEmpty(
       foodCategory.mealType
     );
-    ingredients.forEach((ingredient, index) => {
-      const ingredientNameError = validateNotEmpty(ingredient.name);
-      const ingredientQuantityError = validateNotEmpty(ingredient.quantity);
-
-      if (ingredientNameError) {
-        newFieldErrors.ingredients = ingredientNameError;
-        isValid = false;
+    // Validate each ingredient group
+    ingredientGroups.forEach((group, groupIndex) => {
+      newFieldErrors.ingredientGroups[groupIndex] = {
+        title: "",
+        ingredients: [],
+      };
+      // Validate title of each ingredient group (if it is provided)
+      if (group.title !== undefined && group.title.trim() !== "") {
+        const groupTitleError = validateNotEmpty(group.title);
+        if (groupTitleError) {
+          newFieldErrors.ingredientGroups[groupIndex].title = groupTitleError;
+          isValid = false;
+        }
       }
-      if (ingredientQuantityError) {
-        newFieldErrors.ingredients = ingredientQuantityError;
+
+      // Validate each ingredient in the group
+      group.ingredients.forEach((ingredient, index) => {
+        const ingredientNameError = validateNotEmpty(ingredient.name);
+        const ingredientQuantityError = validateNotEmpty(ingredient.quantity);
+
+        newFieldErrors.ingredientGroups[groupIndex].ingredients[index] = {
+          name: ingredientNameError || "",
+          quantity: ingredientQuantityError || "",
+          unit: "",
+        };
+
+        if (ingredientNameError || ingredientQuantityError) {
+          isValid = false;
+        }
+      });
+
+      // Check for unique ingredients within the group
+      let ingredientsSet = new Set(
+        group.ingredients.map((ingredient) => ingredient.name.toLowerCase())
+      );
+      if (ingredientsSet.size !== group.ingredients.length) {
+        newFieldErrors.ingredientGroups[groupIndex].ingredients = t(
+          "addRecipe.errors.duplicateIngredients"
+        );
         isValid = false;
       }
     });
@@ -142,14 +191,6 @@ const AddRecipe = () => {
       isValid = false;
     }
 
-    // Check for unique ingredients
-    let ingredientsSet = new Set(
-      ingredients.map((ingredient) => ingredient.name.toLowerCase())
-    );
-    if (ingredientsSet.size !== ingredients.length) {
-      newFieldErrors.ingredients = t("addRecipe.errors.duplicateIngredients");
-      isValid = false;
-    }
     // Check for unique instructions
     let instructionsSet = new Set(instructions);
     if (instructionsSet.size !== instructions.length) {
@@ -188,10 +229,13 @@ const AddRecipe = () => {
         mealType: foodCategory.mealType,
         type: foodCategory.type,
       },
-      ingredients: ingredients.map((ingredient) => ({
-        name: ingredient.name,
-        quantity: ingredient.quantity,
-        unit: ingredient.unit,
+      ingredientGroups: ingredientGroups.map((group) => ({
+        title: group.title,
+        ingredients: group.ingredients.map((ingredient) => ({
+          name: ingredient.name,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+        })),
       })),
       instructions,
       prepTime,
@@ -227,23 +271,19 @@ const AddRecipe = () => {
       mealType: event.target.value, // Update mealType with the new value
     });
   };
-  const handleIngredientChange = (index, field, value) => {
+  const handleIngredientChange = (groupIndex, index, field, value) => {
     setError("");
-    let updatedIngredients = [...ingredients]; // Create a copy of ingredients
-    let ingredient = { ...updatedIngredients[index] }; // Create a copy of specific ingredient
+    const newIngredientGroups = [...ingredientGroups]; // Create a copy of ingredientGroups
+    let ingredient = { ...newIngredientGroups[groupIndex].ingredients[index] }; // Create a copy of specific ingredient
 
+    // Update ingredient fields based on the field type
     if (field === "quantity") {
-      // check if value is a valid decimal number with at most 1 digit after the point
-      const isValid = /^\d*\.?\d{0,1}$/.test(value);
-      if (isValid) {
+      // Quantity must be a positive number
+      if (Number(value) >= 0) {
         ingredient.quantity = value;
-        const newAmountErrors = [...amountErrors];
-        newAmountErrors[index] = "";
-        setAmountErrors(newAmountErrors);
       } else {
-        const newAmountErrors = [...amountErrors];
-        newAmountErrors[index] = "Invalid amount. Please use a valid number.";
-        setAmountErrors(newAmountErrors);
+        // Set an error message if the quantity is not a positive number
+        setError(t("addRecipe.errors.quanPositive"));
       }
     } else if (field === "name") {
       ingredient.name = value;
@@ -251,36 +291,62 @@ const AddRecipe = () => {
       ingredient.unit = value;
     }
 
-    console.log("Before update", updatedIngredients);
-    updatedIngredients[index] = ingredient;
-    console.log("After update", updatedIngredients);
-    setIngredients(updatedIngredients);
+    newIngredientGroups[groupIndex].ingredients[index] = ingredient;
+    setIngredientGroups(newIngredientGroups);
   };
-
   let navigate = useNavigate();
 
   const handleClick = () => {
     navigate("/recipes");
   };
-
-  const addIngredient = () => {
-    if (ingredients.length >= 30) {
-      setError(t("addRecipe.errors.maxIngredients"));
+  const handleGroupTitleChange = (groupIndex, value) => {
+    const newIngredientGroups = [...ingredientGroups];
+    newIngredientGroups[groupIndex].title = value;
+    setIngredientGroups(newIngredientGroups);
+  };
+  const addIngredientGroup = () => {
+    if (ingredientGroups.length >= 30) {
+      setError(t("addRecipe.errors.maxIngredientGroups"));
       return;
     }
     setError("");
-    setIngredients([...ingredients, { name: "", quantity: "", unit: "g" }]);
+    setIngredientGroups([
+      ...ingredientGroups,
+      { title: "", ingredients: [{ name: "", quantity: "", unit: "" }] },
+    ]);
   };
-  useEffect(() => {
-    console.log(ingredients);
-  }, [ingredients]);
 
-  const removeIngredient = (index) => {
-    if (ingredients.length === 1) {
+  // Use this function to add a new ingredient to a group
+  const addIngredient = (groupIndex) => {
+    const newIngredientGroups = [...ingredientGroups];
+    newIngredientGroups[groupIndex].ingredients.push({
+      name: "",
+      quantity: "",
+      unit: "g",
+    });
+    setIngredientGroups(newIngredientGroups);
+  };
+
+  // Function to remove an entire ingredient group
+  const removeIngredientGroup = (groupIndex) => {
+    if (ingredientGroups.length === 1) {
+      setError(t("addRecipe.errors.atLeastOneIngredientGroup"));
+      return;
+    }
+    setIngredientGroups(ingredientGroups.filter((_, i) => i !== groupIndex));
+  };
+
+  // Function to remove a specific ingredient from a specific group
+  const removeIngredient = (groupIndex, index) => {
+    if (ingredientGroups[groupIndex].ingredients.length === 1) {
       setError(t("addRecipe.errors.atLeastOneIngredient"));
       return;
     }
-    setIngredients(ingredients.filter((_, i) => i !== index));
+    const newIngredientGroups = [...ingredientGroups];
+    newIngredientGroups[groupIndex].ingredients = newIngredientGroups[
+      groupIndex
+    ].ingredients.filter((_, i) => i !== index);
+    setIngredientGroups(newIngredientGroups);
     setAmountErrors(amountErrors.filter((_, i) => i !== index));
   };
   const handleInstructionChange = (event, index) => {
@@ -288,15 +354,59 @@ const AddRecipe = () => {
     newInstructions[index] = event.target.value;
     setInstructions(newInstructions);
   };
-  const handleBlur = (event, field) => {
+  const handleBlur = (
+    event,
+    field,
+    groupIndex = null,
+    ingredientIndex = null
+  ) => {
     const value = event.target.value;
     let error = "";
 
-    if (field === "ingredients" || field === "instructions") {
-      // Check if it's an array and not empty
+    if (field.startsWith("ingredientGroups") && groupIndex !== null) {
+      const subField = field.split(".")[1];
+
+      if (subField === "ingredients" && ingredientIndex !== null) {
+        const ingredientField = field.split(".")[2];
+
+        if (
+          (ingredientField === "name" || ingredientField === "quantity") &&
+          value.trim() === ""
+        ) {
+          error = t("addRecipe.errors.fieldEmpty");
+        }
+
+        if (ingredientField === "name") {
+          // update ingredient name errors
+          setIngredientNameErrors((prevErrors) => {
+            const newErrors = [...prevErrors];
+            if (!newErrors[groupIndex]) {
+              newErrors[groupIndex] = [];
+            }
+            newErrors[groupIndex][ingredientIndex] = error;
+            return newErrors;
+          });
+        } else if (ingredientField === "quantity") {
+          // update ingredient quantity errors
+          setIngredientQuantityErrors((prevErrors) => {
+            const newErrors = [...prevErrors];
+            if (!newErrors[groupIndex]) {
+              newErrors[groupIndex] = [];
+            }
+            newErrors[groupIndex][ingredientIndex] = error;
+            return newErrors;
+          });
+        }
+      }
+    } else if (field === "instructions") {
       if (!Array.isArray(value) || value.length === 0) {
         error = t("addRecipe.errors.fieldEmpty");
       }
+
+      setFieldErrors((prevErrors) => ({
+        ...prevErrors,
+        [field]: error,
+      }));
     } else if (value.trim() === "") {
       if (field === "category" || field === "foodType") {
         error = t("addRecipe.errors.selectValue");
@@ -304,31 +414,36 @@ const AddRecipe = () => {
         field === "foodCategory.mealType" ||
         field === "foodCategory.type"
       ) {
-        error = t("addRecipe.errors.foodCategor");
+        error = t("addRecipe.errors.foodCategory");
       } else {
         error = t("addRecipe.errors.fieldEmpty");
+      }
+
+      if (field.startsWith("foodCategory.")) {
+        const subField = field.split(".")[1];
+        setFieldErrors((prevErrors) => ({
+          ...prevErrors,
+          foodCategory: {
+            ...prevErrors.foodCategory,
+            [subField]: error,
+          },
+        }));
+      } else {
+        setFieldErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: error,
+        }));
       }
     } else if (
       (field === "prepTime" || field === "cookTime") &&
       (!Number.isInteger(Number(value)) || Number(value) <= 0)
     ) {
       error = t("addRecipe.errors.positiveInteger");
-    }
 
-    if (field.startsWith("foodCategory.")) {
-      const subField = field.split(".")[1];
-      setFieldErrors({
-        ...fieldErrors,
-        foodCategory: {
-          ...fieldErrors.foodCategory,
-          [subField]: error,
-        },
-      });
-    } else {
-      setFieldErrors({
-        ...fieldErrors,
+      setFieldErrors((prevErrors) => ({
+        ...prevErrors,
         [field]: error,
-      });
+      }));
     }
   };
   const handleAddInstruction = () => {
@@ -747,116 +862,122 @@ const AddRecipe = () => {
           )}
         </label>
         <h2>{t("addRecipe.ingredients.title")}</h2>
-        {ingredients.map((ingredient, index) => (
-          <div key={index}>
+        {ingredientGroups.map((ingredientGroup, groupIndex) => (
+          <div key={groupIndex}>
             <label className={styles.labelContainer}>
-              {t("addRecipe.name")}:
+              {t("addRecipe.groupTitle")}:
               <input
                 type="text"
-                value={ingredient.name}
+                placeholder="Optional"
+                value={ingredientGroup.title}
                 onChange={(event) =>
-                  handleIngredientChange(index, "name", event.target.value)
-                }
-                onBlur={(event) => handleBlur(event, "ingredient")}
-                maxLength="50"
-              />
-              {fieldErrors.ingredient && (
-                <div className={styles.error}>{fieldErrors.ingredient}</div>
-              )}
-            </label>
-
-            <label className={styles.labelContainer}>
-              {t("addRecipe.ingredients.amount")}:
-              <input
-                type="text"
-                value={ingredient.quantity}
-                onChange={(event) =>
-                  handleIngredientChange(index, "quantity", event.target.value)
+                  handleGroupTitleChange(groupIndex, event.target.value)
                 }
                 maxLength="50"
-                onBlur={(event) => {
-                  handleBlur(event, "ingredients[" + index + "]");
-                  setDisplayUnits(false);
-                }}
-                onFocus={() => setDisplayUnits(true)}
               />
-              {amountErrors[index] && (
-                <div className={styles.error}>{amountErrors[index]}</div>
-              )}
             </label>
+            {ingredientGroup.ingredients.map((ingredient, index) => (
+              <div key={index}>
+                <label className={styles.labelContainer}>
+                  {t("addRecipe.name")}:
+                  <input
+                    type="text"
+                    value={ingredient.name}
+                    onChange={(event) =>
+                      handleIngredientChange(
+                        groupIndex,
+                        index,
+                        "name",
+                        event.target.value
+                      )
+                    }
+                    maxLength="50"
+                    onBlur={(event) =>
+                      handleBlur(
+                        event,
+                        "ingredientGroups.ingredients.name",
+                        groupIndex,
+                        index
+                      )
+                    }
+                  />
+                  {ingredientNameErrors[groupIndex] &&
+                    ingredientNameErrors[groupIndex][index] && (
+                      <div className={styles.error}>
+                        {ingredientNameErrors[groupIndex][index]}
+                      </div>
+                    )}
+                </label>
 
-            <label className={styles.labelContainer}>
-              {t("addRecipe.ingredients.unitLabel")}:
-              <select
-                value={ingredient.unit}
-                onChange={(event) =>
-                  handleIngredientChange(index, "unit", event.target.value)
-                }
-                className={styles.unitSelect}
-              >
-                {ingredient.unit === "" && (
-                  <option value="">
-                    {t("addRecipe.ingredients.unit.unitSelection")}
-                  </option>
-                )}
-                <option value="g">{t("addRecipe.ingredients.unit.g")}</option>
-                <option value="kg">{t("addRecipe.ingredients.unit.kg")}</option>
-                <option value="oz">{t("addRecipe.ingredients.unit.oz")}</option>
-                <option value="lb">{t("addRecipe.ingredients.unit.lb")}</option>
-                <option value="dl">{t("addRecipe.ingredients.unit.dl")}</option>
-                <option value="ml">{t("addRecipe.ingredients.unit.ml")}</option>
-                <option value="l">{t("addRecipe.ingredients.unit.l")}</option>
-                <option value="pinch">
-                  {t("addRecipe.ingredients.unit.pinch")}
-                </option>
+                <label className={styles.labelContainer}>
+                  {t("addRecipe.ingredients.amount")}:
+                  <input
+                    type="text"
+                    value={ingredient.quantity}
+                    onChange={(event) =>
+                      handleIngredientChange(
+                        groupIndex,
+                        index,
+                        "quantity",
+                        event.target.value
+                      )
+                    }
+                    maxLength="50"
+                    onBlur={(event) => {
+                      handleBlur(
+                        event,
+                        "ingredientGroups.ingredients.quantity",
+                        groupIndex,
+                        index
+                      );
+                      setDisplayUnits(false);
+                    }}
+                    onFocus={() => setDisplayUnits(true)}
+                  />
+                  {ingredientQuantityErrors[groupIndex] &&
+                    ingredientQuantityErrors[groupIndex][index] && (
+                      <div className={styles.error}>
+                        {ingredientQuantityErrors[groupIndex][index]}
+                      </div>
+                    )}
+                </label>
 
-                <option value="tbsp">
-                  {t("addRecipe.ingredients.unit.tbsp")}
-                </option>
+                {error && <div className={styles.error}>{error}</div>}
+                <button
+                  type="button"
+                  className={styles.addButton}
+                  onClick={() => addIngredient(groupIndex)}
+                >
+                  {t("addRecipe.ingredients.add")}
+                </button>
 
-                <option value="clove">
-                  {t("addRecipe.ingredients.unit.clove")}
-                </option>
-                <option value="tsp">
-                  {t("addRecipe.ingredients.unit.tsp")}
-                </option>
-                <option value="cup">
-                  {t("addRecipe.ingredients.unit.cup")}
-                </option>
-                <option value="piece">
-                  {t("addRecipe.ingredients.unit.piece")}
-                </option>
-                <option value="gallon">
-                  {t("addRecipe.ingredients.unit.gallon")}
-                </option>
-                <option value="fluid ounce">
-                  {t("addRecipe.ingredients.unit.fluidounce")}
-                </option>
-                <option value="bunch">
-                  {t("addRecipe.ingredients.unit.bunch")}
-                </option>
-              </select>
-              {fieldErrors.unit && (
-                <div className={styles.error}>{fieldErrors.unit}</div>
-              )}
-            </label>
+                <button
+                  type="button"
+                  onClick={() => removeIngredient(groupIndex, index)}
+                  className={`${styles.button} ${styles.removeButton}`}
+                >
+                  {t("addRecipe.ingredients.remove")}
+                </button>
+              </div>
+            ))}
 
-            {error && <div className={styles.error}>{error}</div>}
             <button
               type="button"
               className={styles.addButton}
-              onClick={addIngredient}
+              onClick={addIngredientGroup}
             >
-              {t("addRecipe.ingredients.add")}
+              {t("addRecipe.ingredients.addGroup")}
             </button>
 
-            <button
-              type="button"
-              onClick={() => removeIngredient(index)}
-              className={`${styles.button} ${styles.removeButton}`}
-            >
-              {t("addRecipe.ingredients.remove")}
-            </button>
+            {ingredientGroups.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeIngredientGroup(groupIndex)}
+                className={`${styles.button} ${styles.removeButton}`}
+              >
+                {t("addRecipe.ingredients.removeGroup")}
+              </button>
+            )}
           </div>
         ))}
 
@@ -870,7 +991,7 @@ const AddRecipe = () => {
                 value={instruction}
                 onChange={(event) => handleInstructionChange(event, index)}
                 onBlur={(event) => handleBlur(event, "instruction")}
-                maxLength="70"
+                maxLength="80"
               />
               {fieldErrors.instruction && (
                 <div className={styles.error}>{fieldErrors.instruction}</div>

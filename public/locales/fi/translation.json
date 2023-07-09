@@ -15,6 +15,7 @@
     "logged_out": "Kirjauduit ulos",
     "addRecipe": {
       "title": "Lisää resepti",
+      "groupTitle": "Ruokaryhmä",
       "name": "Nimi",
       "description": "Kuvaus",
       "category": "Kategoria",
@@ -46,6 +47,7 @@
         "amount": "Määrä",
         "remove": "Poista",
         "addIngredient": "Lisää ainesosa",
+        "addGroup": "Lisää ruokaryhmä",
         "add": "Lisää ainesosa",
         "unitLabel": "Unit", 
         "unit": {
@@ -329,7 +331,7 @@
           "beverage": "Juoma",
           "salad": "Salaatti",
           "Soup": "Keitto",
-          "snack": "Välipala",
+          "Snack": "Välipala",
           "bread": "Leipä",
           "vegetarian": "Kasvis",
           "vegan": "Vegaani",
@@ -343,6 +345,24 @@
         "lactoseIntolerant": "Laktoositon",
         "paleo": "Paleo"
   
+        },"units": {
+          "g": "g (grammoja)",
+          "kg": "kg (kilogrammoja)",
+          "oz": "oz (unsseja)",
+          "lb": "lb (pounds)",
+          "dl": "dl (desilitroja)",
+          "ml": "ml (millilitroja)",
+          "l": "l (litroja)",
+          "tbsp": "tbsp (ruokalusikallinen)",
+          "tsp": "tsp (teelusikallinen)",
+          "cup": "kuppi",
+          "piece": "kpl",
+          "clove": "kynsi",
+          "gallon": "gallona",
+          "fluidounce": "fluid ounce",
+          "bunch": "ruukku",
+          "sprig": "oksa",
+          "can": "purkki"
         }
     
 
@@ -411,7 +431,8 @@
               "gallon": "gallona",
               "fluidounce": "fluid ounce",
               "bunch": "ruukku",
-              "sprig": "oksa"
+              "sprig": "oksa",
+              "can": "purkki"
             
       
             }

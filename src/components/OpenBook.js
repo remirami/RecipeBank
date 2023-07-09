@@ -69,7 +69,8 @@ const OpenBook = ({
       })
       .join(", ");
   };
-
+  console.log("Recipe", recipe);
+  console.log("Recipe ingredients", recipe.ingredients);
   return (
     <div className={styles.bookContainer}>
       <div className={styles.openBook}>
@@ -114,25 +115,44 @@ const OpenBook = ({
           </p>
           <h3>{t("openBook.ingredients")}:</h3>
           <ul className={styles.ingredientsList}>
-            {recipe.ingredients.map((ingredient, index) => (
-              <li key={index} className={styles.ingredient}>
-                <input
-                  type="checkbox"
-                  id={`ingredient-${index}`}
-                  onChange={() => handleIngredientCheckboxChange(index)}
-                />
-                <label
-                  htmlFor={`ingredient-${index}`}
-                  className={
-                    checkedIngredients.includes(index)
-                      ? styles.checkedIngredient
-                      : ""
-                  }
-                >
-                  {ingredient.name} - {ingredient.quantity} {ingredient.unit}
-                </label>
-              </li>
-            ))}
+            {recipe.ingredientGroups && recipe.ingredientGroups.length > 0 ? (
+              recipe.ingredientGroups.map((group, groupIndex) => (
+                <li key={`group-${groupIndex}`}>
+                  {group.title && <h4>{group.title}</h4>}{" "}
+                  {/* Only display this if group.title exists */}
+                  {group.ingredients.map((ingredient, ingredientIndex) => (
+                    <div
+                      key={`ingredient-${groupIndex}-${ingredientIndex}`}
+                      className={styles.ingredient}
+                    >
+                      <input
+                        type="checkbox"
+                        id={`ingredient-${groupIndex}-${ingredientIndex}`}
+                        onChange={() =>
+                          handleIngredientCheckboxChange(
+                            groupIndex,
+                            ingredientIndex
+                          )
+                        }
+                      />
+                      <label
+                        htmlFor={`ingredient-${groupIndex}-${ingredientIndex}`}
+                        className={
+                          checkedIngredients.includes(ingredientIndex)
+                            ? styles.checkedIngredient
+                            : ""
+                        }
+                      >
+                        {ingredient.name} - {ingredient.quantity}{" "}
+                        {t(`openBook.units.${ingredient.unit}`)}
+                      </label>
+                    </div>
+                  ))}
+                </li>
+              ))
+            ) : (
+              <li>{t("openBook.no_ingredients")}</li>
+            )}
           </ul>
         </div>
         <div className={styles.rightPage}>

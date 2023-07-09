@@ -7,6 +7,7 @@ import styles from "./EditRecipe.module.css";
 const EditRecipe = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
+  const [ingredientGroups, setIngredientGroups] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [foodCategory, setFoodCategory] = useState({ mealType: "", type: "" });
@@ -113,7 +114,7 @@ const EditRecipe = () => {
       name: "",
       description: "",
       foodCategory: { mealType: "", type: "" },
-      ingredients: "",
+      ingredientGroups: [{ title: "", ingredients: "" }],
       instructions: "",
       prepTime: "",
       cookTime: "",
@@ -121,6 +122,28 @@ const EditRecipe = () => {
       foodType: "",
       dietaryPreference: "",
     };
+    // Initialize error object for each ingredient group
+    ingredientGroups.forEach((group, groupIndex) => {
+      newFieldErrors.ingredientGroups[groupIndex] = {
+        title: "",
+        ingredients: [],
+      };
+      group.ingredients.forEach((ingredient, ingredientIndex) => {
+        newFieldErrors.ingredientGroups[groupIndex].ingredients[
+          ingredientIndex
+        ] = {
+          name: "",
+          quantity: "",
+        };
+      });
+    });
+    // Initialize error object for each ingredient group
+    ingredientGroups.forEach((_, groupIndex) => {
+      newFieldErrors.ingredientGroups[groupIndex] = {
+        title: "",
+        ingredients: [],
+      };
+    });
     // Validate name, description and category
     newFieldErrors.name = validateNotEmpty(name);
     newFieldErrors.description = validateNotEmpty(description);
@@ -133,26 +156,23 @@ const EditRecipe = () => {
       isValid = false;
     }
 
-    ingredients.forEach((ingredient, index) => {
-      const ingredientNameError = validateNotEmpty(
-        ingredient.name,
-        `Ingredient name at index ${index}`
-      );
-      const ingredientQuantityError = validateNotEmpty(
-        ingredient.quantity,
-        `Ingredient quantity at index ${index}`
-      );
-
-      if (ingredientNameError) {
-        newFieldErrors.ingredients = ingredientNameError;
-        isValid = false;
-      }
-      if (ingredientQuantityError) {
-        newFieldErrors.ingredients = ingredientQuantityError;
-        isValid = false;
-      }
+    // Validate ingredient groups
+    ingredientGroups.forEach((group, groupIndex) => {
+      group.ingredients.forEach((ingredient, ingredientIndex) => {
+        if (ingredient.name.trim() === "") {
+          newFieldErrors.ingredientGroups[groupIndex].ingredients[
+            ingredientIndex
+          ] = "Ingredient name is required.";
+          isValid = false;
+        }
+        if (ingredient.quantity.trim() === "") {
+          newFieldErrors.ingredientGroups[groupIndex].ingredients[
+            ingredientIndex
+          ] = "Ingredient quantity is required.";
+          isValid = false;
+        }
+      });
     });
-
     if (instructions.length > 30) {
       newFieldErrors.instructions = "You can add up to 30 instructions only.";
       isValid = false;
@@ -227,11 +247,7 @@ const EditRecipe = () => {
       name,
       description,
       foodCategory,
-      ingredients: ingredients.map((ingredient) => ({
-        name: ingredient.name,
-        quantity: ingredient.quantity,
-        unit: ingredient.unit,
-      })),
+      ingredientGroups,
       instructions,
       dietaryPreference,
       foodType,
@@ -844,6 +860,9 @@ const EditRecipe = () => {
                   <option value="bunch">
                     {t("editRecipe.ingredients.unit.bunch")}
                   </option>
+                  <option value="can">
+                    {t("editRecipe.ingredients.unit.can")}
+                  </option>
                 </select>
                 {fieldErrors[index] && (
                   <div className={styles.error}>{fieldErrors[index]}</div>
@@ -876,7 +895,7 @@ const EditRecipe = () => {
                   type="text"
                   id={`instruction-${index}`}
                   value={instruction}
-                  maxLength="70"
+                  maxLength="80"
                   onChange={(e) => {
                     const updatedInstructions = [...instructions];
                     updatedInstructions[index] = e.target.value;

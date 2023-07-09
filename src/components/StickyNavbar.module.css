@@ -1,21 +1,28 @@
 .navbar {
-    display: flex;
-    justify-content: space-around;
-    background-color: #4b2903;
-    padding: 1rem;
-    border-bottom: 1px solid #000000;
-    border-radius: 8px;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000; 
-  
-  
+  display: flex;
+  justify-content: space-around;
+  background-color: #4b2903;
+  padding: 1rem;
+  border-bottom: 1px solid #000000;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 960px; 
+  margin-left: auto;
+  margin-right: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  flex-wrap: wrap; 
+}
+
+@media (max-width: 600px) {
+  .navbar a,
+  .navbar button {
+    font-size: 0.8rem; 
   }
+}
   
   .navbar a,
   .navbar button {
