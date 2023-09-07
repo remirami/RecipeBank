@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import RecipeList from "./RecipeList";
 import AddRecipe from "./AddRecipe";
 import EditRecipe from "./EditRecipe";
@@ -14,7 +14,41 @@ import ConfirmEmail from "./ConfirmEmail";
 import ResetPassword from "./ResetPassword";
 import Profile from "./Profile";
 
-const AppRoutes = ({ onLogin, isLoggedIn }) => {
+const AppRoutes = ({ onLogin, isLoggedIn, handleLogout }) => {
+  const navigate = useNavigate();
+
+  const isTokenExpired = () => {
+    const token = localStorage.getItem("recipeAppToken");
+
+    if (!token) {
+      return true;
+    }
+
+    const decodedToken = JSON.parse(atob(token.split(".")[1]));
+
+    const currentTime = Date.now() / 1000;
+
+    if (decodedToken.exp < currentTime) {
+      return true;
+    }
+
+    return false;
+  };
+
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      if (isTokenExpired()) {
+        handleLogout();
+      }
+    };
+
+    const interval = setInterval(checkTokenExpiration, 60000); // Check every minute
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [handleLogout, navigate]);
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />

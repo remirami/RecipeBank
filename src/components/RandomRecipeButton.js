@@ -10,6 +10,7 @@ const RandomRecipeButton = ({ onClick }) => {
       <button onClick={onClick} className={styles.randomButton}>
         {t("randomRecipeButton.text")}
       </button>
+      <br></br>
     </div>
   );
 };

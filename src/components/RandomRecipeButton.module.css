@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 150px;
+
 }
 
 .randomRecipeButtonWrapper {
@@ -24,8 +25,11 @@
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.3s;
+  font-family: 'Quicksand', sans-serif;
+
 }
 
 .randomButton:hover {
-  background-color: #5e645f;
-}
+  background-color: #4b2903;
+  color: #ffffff
+  ;}

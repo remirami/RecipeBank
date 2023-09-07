@@ -29,10 +29,12 @@ const RecipeList = () => {
       const categoryMatch =
         typeof recipe.category === "string" &&
         recipe.category.toLowerCase().includes(lowerCaseQuery);
-      const ingredientMatch = recipe.ingredients.some((ingredient) =>
-        ingredient.name.toLowerCase().includes(lowerCaseQuery)
+      const ingredientGroupMatch = recipe.ingredientGroups.some((group) =>
+        group.ingredients.some((ingredient) =>
+          ingredient.name.toLowerCase().includes(lowerCaseQuery)
+        )
       );
-      return nameMatch || categoryMatch || ingredientMatch;
+      return nameMatch || categoryMatch || ingredientGroupMatch;
     });
   };
 
