@@ -6,10 +6,13 @@ import { Link } from "react-router-dom";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [cookTime, setCookTime] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedCategoryType, setSelectedCategoryType] = useState("");
+  const [includeLiked, setIncludeLiked] = useState(false);
+  const [searchByUsername, setSearchByUsername] = useState(false);
+  const [maxCookTime, setMaxCookTime] = useState(60);
   const [searchPerformed, setSearchPerformed] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedMealType, setSelectedMealType] = useState("");
   const [searchByLikes, setSearchByLikes] = useState(false);
   const [dietaryPreferences, setDietaryPreferences] = useState([]);
   const [foodType, setFoodType] = useState("");
@@ -29,12 +32,15 @@ const Search = () => {
   const handleSearch = async () => {
     const response = await searchRecipes(
       searchTerm,
-      selectedCategory,
+      selectedCategoryType,
+      selectedMealType,
+      searchByUsername,
+      includeLiked,
       searchByLikes,
       foodType,
       subType,
       dietaryPreferences,
-      cookTime
+      maxCookTime
     );
 
     if (response && response.data && response.data.recipes) {
@@ -44,22 +50,15 @@ const Search = () => {
         "searchRecipes response does not contain data.recipes property",
         response
       );
-      setSearchResults([]); // Use an empty array as a fallback
+      setSearchResults([]);
     }
 
     setSearchPerformed(true);
   };
-  const handleCheckboxChange = (event) => {
-    setSearchByLikes(event.target.checked);
-  };
-  const handleCookTimeInput = (event) => {
-    // Allow only numbers
-    const re = /^[0-9\b]+$/;
 
-    // if value is not blank, then test the regex
-    if (event.target.value === "" || re.test(event.target.value)) {
-      setCookTime(event.target.value);
-    }
+  const handleMaxCookTimeChange = (e) => {
+    const newMaxTime = Number(e.target.value);
+    setMaxCookTime(newMaxTime);
   };
   const handleSearchInput = (event) => {
     let searchTerm = event.target.value;
@@ -86,11 +85,13 @@ const Search = () => {
   };
   const resetSearch = () => {
     setSearchTerm("");
-    setSelectedCategory("");
+    setSelectedCategoryType("");
     setSearchByLikes(false);
     setFoodType("");
     setSubType("");
+    setSelectedMealType("");
     setDietaryPreferences([]);
+    setMaxCookTime(0);
   };
 
   return (
@@ -108,22 +109,34 @@ const Search = () => {
 
         <select
           className={styles.searchSelect}
-          value={selectedCategory}
-          onChange={(event) => setSelectedCategory(event.target.value)}
+          value={selectedCategoryType}
+          onChange={(event) => setSelectedCategoryType(event.target.value)}
         >
           <option value="">{t("search.options.selectCategory")}</option>
+          <option value="Pizza">{t("search.options.Pizza")}</option>
+          <option value="Pasta">{t("search.options.Pasta")}</option>
+          <option value="Beverage">{t("search.options.Beverage")}</option>
+          <option value="Salad">{t("search.options.Salad")}</option>
+          <option value="Soup">{t("search.options.Soup")}</option>
+          <option value="Snack">{t("search.options.Snack")}</option>
+          <option value="Bread">{t("search.options.Bread")}</option>
+          <option value="Cake">{t("search.options.Cake")}</option>
+          <option value="Pie">{t("search.options.Pie")}</option>
+          <option value="Pastry">{t("search.options.Pastry")}</option>
+          <option value="Bake">{t("search.options.Bake")}</option>
+          <option value="Other">{t("search.options.Other")}</option>
+        </select>
+        <select
+          className={styles.searchSelect}
+          value={selectedMealType}
+          onChange={(event) => setSelectedMealType(event.target.value)}
+        >
+          <option value="">{t("search.options.selectMealType")}</option>
           <option value="Dessert">{t("search.options.Dessert")}</option>
           <option value="Main Course">{t("search.options.Main Course")}</option>
           <option value="Appetizer">{t("search.options.Appetizer")}</option>
           <option value="Breakfast">{t("search.options.Breakfast")}</option>
           <option value="Side Dish">{t("search.options.Side Dish")}</option>
-          <option value="Salad">{t("search.options.Salad")}</option>
-          <option value="Soup">{t("search.options.Soup")}</option>
-          <option value="Snack">{t("search.options.Snack")}</option>
-          <option value="Pizza">{t("search.options.Pizza")}</option>
-          <option value="Bread">{t("search.options.Bread")}</option>
-          <option value="Beverage">{t("search.options.Beverage")}</option>
-          <option value="Pasta">{t("search.options.Pasta")}</option>
         </select>
 
         <select
@@ -172,7 +185,7 @@ const Search = () => {
               <option key={subTypeOption} value={subTypeOption}>
                 {t(`search.options.${subTypeOption}`)}
               </option>
-            ))}{" "}
+            ))}
         </select>
         <label className={styles.labelContainer}>
           {t("search.dietaryPreferences")}:
@@ -182,6 +195,7 @@ const Search = () => {
               id="vegan"
               name="dietaryPreference"
               value="Vegan"
+              checked={dietaryPreferences.includes("Vegan")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="vegan">{t("search.dietaryOptions.vegan")}</label>
@@ -190,6 +204,7 @@ const Search = () => {
               id="vegetarian"
               name="dietaryPreference"
               value="Vegetarian"
+              checked={dietaryPreferences.includes("Vegetarian")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="vegetarian">
@@ -200,6 +215,7 @@ const Search = () => {
               id="glutenFree"
               name="dietaryPreference"
               value="Gluten-free"
+              checked={dietaryPreferences.includes("Gluten-free")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="glutenFree">
@@ -210,6 +226,7 @@ const Search = () => {
               id="dairyFree"
               name="dietaryPreference"
               value="Dairy-free"
+              checked={dietaryPreferences.includes("Dairy-free")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="dairyFree">
@@ -220,6 +237,7 @@ const Search = () => {
               id="paleo"
               name="dietaryPreference"
               value="Paleo"
+              checked={dietaryPreferences.includes("Paleo")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="paleo">{t("search.dietaryOptions.paleo")}</label>
@@ -228,6 +246,7 @@ const Search = () => {
               id="keto"
               name="dietaryPreference"
               value="Keto"
+              checked={dietaryPreferences.includes("Keto")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="keto">{t("search.dietaryOptions.keto")}</label>
@@ -236,6 +255,7 @@ const Search = () => {
               id="lowCarb"
               name="dietaryPreference"
               value="Low-carb"
+              checked={dietaryPreferences.includes("Low-carb")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="lowCarb">
@@ -246,6 +266,7 @@ const Search = () => {
               id="lowFat"
               name="dietaryPreference"
               value="Low-fat"
+              checked={dietaryPreferences.includes("Low-fat")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="lowFat">{t("search.dietaryOptions.lowFat")}</label>
@@ -254,6 +275,7 @@ const Search = () => {
               id="lowSodium"
               name="dietaryPreference"
               value="Low-sodium"
+              checked={dietaryPreferences.includes("Low-sodium")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="lowSodium">
@@ -264,6 +286,7 @@ const Search = () => {
               id="sugarFree"
               name="dietaryPreference"
               value="Sugar-free"
+              checked={dietaryPreferences.includes("Sugar-free")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="sugarFree">
@@ -274,6 +297,7 @@ const Search = () => {
               id="lactoseIntolerant"
               name="dietaryPreference"
               value="Lactose-intolerant"
+              checked={dietaryPreferences.includes("Lactose-intolerant")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="lactoseIntolerant">
@@ -284,6 +308,7 @@ const Search = () => {
               id="eggFree"
               name="dietaryPreference"
               value="Egg-free"
+              checked={dietaryPreferences.includes("Egg-free")}
               onChange={handleDietaryPreferencesChange}
             />
             <label htmlFor="eggFree">
@@ -292,21 +317,37 @@ const Search = () => {
           </div>
         </label>
         <div className={styles.checkboxContainer}>
+          <div className={styles.checkboxContainer}>
+            <input
+              type="checkbox"
+              checked={searchByLikes}
+              onChange={(e) => setSearchByLikes(e.target.checked)}
+            />
+            <label>{t("search.include_liked")}</label>
+          </div>
+
+          <div className={styles.sliderContainer}>
+            <div>
+              <label>
+                Maximum Cook Time: {maxCookTime} minutes
+                <input
+                  type="range"
+                  min="0"
+                  max="600"
+                  value={maxCookTime}
+                  onChange={handleMaxCookTimeChange}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+        <div className={styles.checkboxContainer}>
           <input
             type="checkbox"
-            checked={searchByLikes}
-            onChange={handleCheckboxChange}
+            checked={searchByUsername}
+            onChange={(e) => setSearchByUsername(e.target.checked)}
           />
-          <label className={styles.checkboxLabel}>
-            {t("search.search_by_likes")}
-          </label>
-          <input
-            className={styles.searchInput}
-            type="number"
-            placeholder={t("search.cookTime_placeholder")}
-            value={cookTime}
-            onChange={handleCookTimeInput}
-          />
+          <label>{t("search.searchByUsername")}</label>
         </div>
         <button onClick={handleSearch} className={styles.searchButton}>
           {t("search.search_button")}

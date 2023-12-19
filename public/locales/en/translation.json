@@ -25,7 +25,7 @@
     "options": {
       "selectCategory": "Select category",
       "selectType": "Select category type",
-      "selectMealType": "Select meal type",
+      "selectMealType": "Select a meal type",
       "dessert": "Dessert",
       "main-course": "Main Course",
       "appetizer": "Appetizer",
@@ -34,17 +34,22 @@
       "pizza": "Pizza",
       "pasta": "Pasta",
       "beverage": "Beverage",
+      "bake": "Bake",
+      "pie": "Pie",
+      "pastry": "Pastry",
+      "cake": "Cake",
       "salad": "Salad",
       "Soup": "Soup",
       "snack": "Snack",
-      "bread": "Bread"
+      "bread": "Bread",
+      "other": "Other"
     },
     
     "ingredients": {
       "ingredients": "Ingredients",
       "title": "Ingredients",
       "addGroup": "Add food group",
-
+      "removeGroup": "Remove food group",
       "name": "Name",
       "amount": "Amount",
       "remove": "Remove",
@@ -86,6 +91,7 @@
     "submit": "Submit",
     "errors": {
       "nameRequired": "Name is required.",
+      "foodCategory": "Food category is required.",
       "descriptionRequired": "Description is required.",
       "categoryRequired": "Category is required.",
       "ingredientsRequired": "Insert atleast one ingredient",
@@ -161,6 +167,9 @@
 
     "backtoRecipes": "Back to recipes >"
   },
+  "validation": {
+    "fieldRequired": "This field is required."
+  },
   "login": {
     "title": "Log in",
     "username": "Username",
@@ -197,7 +206,21 @@
     "login": "Log in",
     "register": "Sign up",
     "profile": "Profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "contact": "Contact"
+  },
+  "contact": {
+    "title": "Contact",
+    "placeholder": "Click here to type (maximum of 1000 characters)",
+    "submit": "Submit",
+    "bug_report": "Bug Report",
+    "regular_feedback": "Feedback",
+    "feedback_type": "Feedback type: ",
+    "sending": "Sending feedback",
+    "error": "Message was too long",
+    "thank_you_message": "Thank you for your feedback!"
+
+
   },
   "randomRecipe": {
     "title": "Random Recipe",
@@ -211,12 +234,18 @@
   "search": {
     "search_recipes": "Search Recipes",
     "search_placeholder": "Search by name or ingredient",
+    "include_liked": "Search by likes",
+    "searchByUsername": "Search by username",
+    "reset_button": "Reset",
+
     "search_button": "Search",
     "search_by_likes": "Filter by likes",
     "no_results": "Didn't find any recipes with those terms, try again.",
     "dietaryPreferences":"Dietary preferences",
     "options": {
       "selectCategory": "Select category",
+      "selectMealType": "Select a meal type",
+
       "Dessert": "Dessert",
       "Main Course": "Main Course",
       "Appetizer": "Appetizer",
@@ -229,6 +258,8 @@
       "Pasta":  "Pasta",
       "Beverage": "Beverage",
       "Bread": "Bread",
+      "Bake": "Bake",
+      "Pie": "Pie",
       "selectFoodType": "Select food type",
       "selectSubType": "Select subtype",
       "Vegetable": "Vegetable",
@@ -315,10 +346,35 @@
     "tooltipDislike": "Please log in to dislike the recipe",
     "foodType": "Food type",
     "dietaryPreference": "Dietary preference",
+    "no_dietaryPreference": "No dietary preference",
     "category":"Category",
     "no_servingSize": "",
     "selectionOptions": {
-      "main-course": "Main Course"
+      "Main Course": "Main Course",
+      "Appetizer": "Appetizer",
+      "Side Dish": "Side Dish",
+      "Breakfast": "Breakfast",
+      "Dessert": "Dessert",
+      "pizza": "Pizza",
+      "pasta": "Pasta",
+      "beverage": "Beverage",
+      "Salad": "Salad",
+      "Soup": "Soup",
+      "Snack": "Snack",
+      "Bread": "Bread",
+      "Vegetarian": "Vegetarian",
+      "Vegan": "Vegan",
+      "glutenFree": "Gluten free",
+      "lowFat": "Low fat",
+      "Egg-free": "Egg-free",
+      "lowCarb": "Low carb",
+      "dairyFree": "Dairy free",
+      "lowSodium": "Low sodium",
+    "lowSugar": "Low sugar",
+    "lactoseIntolerant": "Dairy free",
+    "paleo": "Paleo",
+    "Other": "Other"
+
     }
 
   },
@@ -336,6 +392,9 @@
     "ingredientUnit": "Unit",
     "ingredientAmount": "Amount",
     "addIngredient": "Add Ingredient",
+    "addIngredientGroup": "Add Ingredient Group",
+    "removeIngredientGroup": "Remove Ingredient Group",
+    "groupTitlePlaceholder": "Type...",
     "instructions": "Instructions",
     "step": "Step {{number}}",
     "addInstruction": "Add Instruction",
@@ -370,11 +429,31 @@
       "salad": "Salad",
       "Soup": "Soup",
       "snack": "Snack",
-      "bread": "Bread"
+      "bread": "Bread",
+      "other": "Other"
     },
     "ingredients": {
-      "label": "Ingredients"
+      "label": "Ingredients",
+      "unit": {
+        "unitSelection":"Select a unit",
+        "g":"g (grams)",
+        "kg":"kg (kilograms)",
+        "oz":"oz (ounces)",
+        "lb":"lb (pounds)",
+        "dl":"dl (deciliters)",
+        "ml":"ml (milliliters)",
+        "l":"l (liters)",
+        "tbsp":"tbsp (tablespoons)",
+        "tsp":"tsp (teaspoons)",
+        "cup":"cup",
+        "piece": "piece",
+        "clove":"clove",
+        "gallon":"gallon",
+        "fluidounce":"fluid ounce",
+        "bunch":"bunch",
+        "can":"can"
 
+      }
     },
     "foodSubTypes": {
       "Red Meat & Ground Meat": "Red Meat & Ground Meat",

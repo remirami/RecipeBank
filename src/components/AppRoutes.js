@@ -13,7 +13,7 @@ import ForgotPassword from "./ForgotPassword";
 import ConfirmEmail from "./ConfirmEmail";
 import ResetPassword from "./ResetPassword";
 import Profile from "./Profile";
-
+import Contact from "./Contact";
 const AppRoutes = ({ onLogin, isLoggedIn, handleLogout }) => {
   const navigate = useNavigate();
 
@@ -64,6 +64,7 @@ const AppRoutes = ({ onLogin, isLoggedIn, handleLogout }) => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/contact" element={<Contact />} />
     </Routes>
   );
 };

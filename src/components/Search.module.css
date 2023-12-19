@@ -88,3 +88,18 @@
   max-width: 45%; 
   flex: 1 1 0;
 }
+.resetButton {
+  padding: 0.5rem 1rem;
+  font-family: 'Quicksand', sans-serif;
+  margin-right: 20px;
+  border: none;
+  background-color: #4b2903;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+}
+.resetButton:hover {
+    background-color: #c29357;
+  }

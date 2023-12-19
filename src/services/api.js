@@ -144,32 +144,36 @@ export async function getRandomRecipe() {
 }
 export async function searchRecipes(
   searchTerm,
-  category,
-  searchByLikes = false,
+  categoryType,
+  mealType,
+  searchByUsername,
+  includeLiked,
+  searchByLikes,
   foodType,
   subType,
   dietaryPreferences,
-  includeLiked,
-  cookTime
+  maxCookTime
 ) {
   try {
     const response = await api.get("/search", {
       params: {
         searchTerm,
-        category,
+        categoryType,
+        mealType,
+        searchByUsername,
+        includeLiked,
         searchByLikes,
-        searchByUsername: true,
         foodType,
         subType,
-        dietaryPreference: dietaryPreferences,
-        includeLiked,
-        cookTime,
+        dietaryPreferences,
+        maxCookTime,
       },
     });
     console.log("Server response: ", response);
+    console.log("Max cook time:", maxCookTime);
     return response.data;
   } catch (error) {
-    console.error("There was an error in the searchRecipes function: ", error);
+    console.error("Error in searchRecipes function: ", error);
     return { recipes: [] };
   }
 }
@@ -225,4 +229,13 @@ export const changeUserPassword = async (
     newPassword,
   });
   return response.data;
+};
+export const submitFeedback = async (feedbackData) => {
+  try {
+    const response = await api.post("/feedback/submit", feedbackData);
+    return response.data;
+  } catch (error) {
+    console.error("Error submitting feedback:", error);
+    throw error;
+  }
 };

@@ -120,25 +120,28 @@
   .ingredientsList {
     list-style-type: none;
     padding: 0;
-    display: grid;
-    grid-template-columns: auto 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 0.5rem;
     padding: 0 0 20px 0;
+}
 
-  }
-  
-  
-  .ingredient {
-    display: contents;
-  }
-  
-    .ingredient input[type="checkbox"] {
+.ingredient {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredient input[type="checkbox"] {
     margin-right: 0.5rem;
-  }
-  
-  .ingredient label {
-    cursor: pointer;
-  }
+}
+
+.ingredient label {
+  flex-grow: 1;
+  text-align: left;
+  margin-right: 10px; 
+}
+
   
   .checkboxContainer {
     display: flex;

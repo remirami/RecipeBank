@@ -95,11 +95,11 @@ const OpenBook = ({
           </p>
           <p>
             <strong>{t("openBook.dietaryPreference")}:</strong>{" "}
-            {recipe.dietaryPreference &&
-            t(`openBook.selectionOptions.${recipe.dietaryPreference}`) !==
-              `openBook.selectionOptions.${recipe.dietaryPreference}`
-              ? t(`openBook.selectionOptions.${recipe.dietaryPreference}`)
-              : t("openBook.no_dietaryPreference")}{" "}
+            {recipe.dietaryPreference && recipe.dietaryPreference.length > 0
+              ? recipe.dietaryPreference
+                  .map((pref) => t(`openBook.selectionOptions.${pref}`))
+                  .join(", ")
+              : t("openBook.no_dietaryPreference")}
           </p>
           <p>
             <strong>{t("openBook.prepTime")}:</strong>{" "}
@@ -119,22 +119,11 @@ const OpenBook = ({
               recipe.ingredientGroups.map((group, groupIndex) => (
                 <li key={`group-${groupIndex}`}>
                   {group.title && <h4>{group.title}</h4>}{" "}
-                  {/* Only display this if group.title exists */}
                   {group.ingredients.map((ingredient, ingredientIndex) => (
                     <div
                       key={`ingredient-${groupIndex}-${ingredientIndex}`}
                       className={styles.ingredient}
                     >
-                      <input
-                        type="checkbox"
-                        id={`ingredient-${groupIndex}-${ingredientIndex}`}
-                        onChange={() =>
-                          handleIngredientCheckboxChange(
-                            groupIndex,
-                            ingredientIndex
-                          )
-                        }
-                      />
                       <label
                         htmlFor={`ingredient-${groupIndex}-${ingredientIndex}`}
                         className={
@@ -146,6 +135,16 @@ const OpenBook = ({
                         {ingredient.name} - {ingredient.quantity}{" "}
                         {t(`openBook.units.${ingredient.unit}`)}
                       </label>
+                      <input
+                        type="checkbox"
+                        id={`ingredient-${groupIndex}-${ingredientIndex}`}
+                        onChange={() =>
+                          handleIngredientCheckboxChange(
+                            groupIndex,
+                            ingredientIndex
+                          )
+                        }
+                      />
                     </div>
                   ))}
                 </li>

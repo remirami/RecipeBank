@@ -58,8 +58,6 @@ const EditRecipe = () => {
     const fetchRecipe = async () => {
       try {
         const data = await getRecipeById(id);
-        console.log("Data User ID:", data.user_id);
-        console.log("LocalStorage User ID:", localStorage.getItem("userId"));
 
         // Check if the user is the owner of the recipe
         if (
@@ -69,10 +67,6 @@ const EditRecipe = () => {
           setError("You do not have permission to edit this recipe.");
           return;
         }
-        setFoodCategory({
-          mealType: data.foodCategory.mealType || "",
-          type: data.foodCategory.type || "",
-        });
         setDietaryPreference(data.dietaryPreference || "");
         setCookTime(data.cookTime || "");
         setPrepTime(data.prepTime || "");
@@ -81,15 +75,16 @@ const EditRecipe = () => {
         setRecipe(data);
         setName(data.name);
         setDescription(data.description);
-        setIngredients(
-          data.ingredients || [{ name: "", quantity: "", unit: "g" }]
-        );
+
         setInstructions(data.instructions || []);
         setFoodCategory({
           mealType: data.foodCategory.mealType || "",
           type: data.foodCategory.type || "",
         });
-        console.log(typeof data.category);
+        if (data && data.ingredientGroups) {
+          setIngredientGroups(data.ingredientGroups);
+          setIngredients(data.ingredientGroups[0]?.ingredients || []);
+        }
       } catch (error) {
         console.error("Error fetching recipe data:", error);
       }
@@ -105,6 +100,7 @@ const EditRecipe = () => {
     }
     return "";
   }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Validate fields
@@ -128,7 +124,7 @@ const EditRecipe = () => {
         title: "",
         ingredients: [],
       };
-      group.ingredients.forEach((ingredient, ingredientIndex) => {
+      group.ingredients.forEach((ingredients, ingredientIndex) => {
         newFieldErrors.ingredientGroups[groupIndex].ingredients[
           ingredientIndex
         ] = {
@@ -198,8 +194,6 @@ const EditRecipe = () => {
       }
     }
 
-    console.log("foodType:", foodType);
-
     if (!Array.isArray(foodType)) {
       newFieldErrors.foodType = "Food type must be an array";
       isValid = false;
@@ -236,7 +230,6 @@ const EditRecipe = () => {
     }
 
     const userId = localStorage.getItem("userId") || null;
-    console.log("userId from localStorage:", userId);
 
     if (!userId) {
       console.error("User is not logged in");
@@ -260,10 +253,7 @@ const EditRecipe = () => {
     console.log("Submitting updated recipe:", recipe);
 
     try {
-      console.log(ingredients); // Add this line
-
       const response = await updateRecipe(id, recipe);
-      console.log("Recipe updated with ID:", id);
       setError(""); // Clear the error message after successful update
       setSuccessMessage("Recipe updated successfully!");
       navigate(`/recipes/${id}`);
@@ -272,31 +262,57 @@ const EditRecipe = () => {
       setError(error.message || "Error updating recipe. Please try again.");
     }
   };
-  const handleIngredientChange = (index, field, value) => {
+  const validateAmount = (value) => {
+    // Check if value is a positive floating-point number or zero
+    const regex = /^\d*\.?\d+$/;
+    const isValid = regex.test(value);
+    return isValid;
+  };
+  const handleIngredientChange = (groupIndex, index, field, value) => {
     setError("");
-    let updatedIngredients = [...ingredients]; // Create a copy of ingredients
-    let ingredient = { ...updatedIngredients[index] }; // Create a copy of specific ingredient
+    const newIngredientGroups = [...ingredientGroups]; // Create a copy of ingredientGroups
+    let ingredient = { ...newIngredientGroups[groupIndex].ingredients[index] }; // Create a copy of specific ingredient
 
+    // Update ingredient fields based on the field type
     if (field === "quantity") {
-      const numberPart = value.replace(/[^0-9.]/g, "");
-      ingredient.quantity = numberPart; // Keep as string
-
-      const isValidAmount = validateAmount(ingredient.quantity);
-      const newAmountErrors = [...amountErrors];
-      newAmountErrors[index] = isValidAmount
-        ? ""
-        : "Invalid amount. Please use a valid number.";
-      setAmountErrors(newAmountErrors);
+      // Quantity must be a positive number
+      if (Number(value) >= 0) {
+        ingredient.quantity = value;
+      } else {
+        // Set an error message if the quantity is not a positive number
+        setError(t("addRecipe.errors.quanPositive"));
+      }
     } else if (field === "name") {
       ingredient.name = value;
     } else if (field === "unit") {
       ingredient.unit = value;
     }
 
-    console.log("Before update", updatedIngredients);
-    updatedIngredients[index] = ingredient;
-    console.log("After update", updatedIngredients);
-    setIngredients(updatedIngredients);
+    newIngredientGroups[groupIndex].ingredients[index] = ingredient;
+    setIngredientGroups(newIngredientGroups);
+  };
+  const handleGroupTitleChange = (groupIndex, value) => {
+    const newIngredientGroups = [...ingredientGroups];
+    newIngredientGroups[groupIndex].title = value;
+    setIngredientGroups(newIngredientGroups);
+  };
+  const addIngredientGroup = () => {
+    if (ingredientGroups.length >= 30) {
+      setError(t("addRecipe.errors.maxIngredientGroups"));
+      return;
+    }
+    setError("");
+    setIngredientGroups([
+      ...ingredientGroups,
+      { title: "", ingredients: [{ name: "", quantity: "", unit: "" }] },
+    ]);
+  };
+  const removeIngredientGroup = (groupIndex) => {
+    if (ingredientGroups.length === 1) {
+      setError(t("addRecipe.errors.atLeastOneIngredientGroup"));
+      return;
+    }
+    setIngredientGroups(ingredientGroups.filter((_, i) => i !== groupIndex));
   };
   const handleDietaryPreferencesChange = (event) => {
     const value = event.target.value;
@@ -355,25 +371,25 @@ const EditRecipe = () => {
     }
   };
 
-  const validateAmount = (value) => {
-    console.log("ValidateAmount called with value: ", value);
-
-    // Check if value is a positive floating-point number or zero
-    const regex = /^\d*\.?\d+$/;
-    const isValid = regex.test(value);
-
-    return isValid;
+  const addIngredient = (groupIndex) => {
+    const newIngredientGroups = [...ingredientGroups];
+    newIngredientGroups[groupIndex].ingredients.push({
+      name: "",
+      quantity: "",
+      unit: "g",
+    });
+    setIngredientGroups(newIngredientGroups);
   };
-  const addIngredient = () => {
-    setIngredients([...ingredients, { name: "", quantity: "", unit: "g" }]);
-  };
-
-  const removeIngredient = (index) => {
-    if (ingredients.length === 1) {
-      setError("You must have atleast one ingredient.");
+  const removeIngredient = (groupIndex, index) => {
+    if (ingredientGroups[groupIndex].ingredients.length === 1) {
+      setError(t("addRecipe.errors.atLeastOneIngredient"));
       return;
     }
-    setIngredients(ingredients.filter((_, i) => i !== index));
+    const newIngredientGroups = [...ingredientGroups];
+    newIngredientGroups[groupIndex].ingredients = newIngredientGroups[
+      groupIndex
+    ].ingredients.filter((_, i) => i !== index);
+    setIngredientGroups(newIngredientGroups);
     setAmountErrors(amountErrors.filter((_, i) => i !== index));
   };
 
@@ -681,11 +697,14 @@ const EditRecipe = () => {
                   checked={dietaryPreference.includes("Egg-free")}
                   onChange={handleDietaryPreferencesChange}
                 />
+                <label htmlFor="eggFree">
+                  {t("addRecipe.dietaryOptions.eggFree")}
+                </label>
               </label>
             </div>
-            {fieldErrors.dietaryPreferences && (
+            {fieldErrors.dietaryPreference && (
               <div className={styles.error}>
-                {fieldErrors.dietaryPreferences}
+                {fieldErrors.dietaryPreference}
               </div>
             )}
           </label>
@@ -753,6 +772,12 @@ const EditRecipe = () => {
               <option value="Soup">{t("editRecipe.options.Soup")}</option>
               <option value="Snack">{t("editRecipe.options.snack")}</option>
               <option value="Bread">{t("editRecipe.options.bread")}</option>
+              <option value="Bake">{t("editRecipe.options.bake")}</option>
+              <option value="Pie">{t("editRecipe.options.pie")}</option>
+              <option value="Pastry">{t("editRecipe.options.pastry")}</option>
+              <option value="Cake">{t("editRecipe.options.cake")}</option>
+
+              <option value="Other">{t("editRecipe.options.other")}</option>
             </select>
             {fieldErrors.foodCategory?.type && (
               <div className={styles.error}>
@@ -763,126 +788,132 @@ const EditRecipe = () => {
           <label htmlFor="ingredients">
             {t("editRecipe.ingredients.label")}
           </label>
-          {ingredients &&
-            ingredients.map((ingredient, index) => (
-              <div key={index}>
-                <label htmlFor={`ingredient-name-${index}`}>
-                  {t("editRecipe.ingredientName")}
-                </label>
-                <input
-                  type="text"
-                  id={`ingredient-name-${index}`}
-                  value={ingredient.name}
-                  onBlur={(event) => handleBlur(event, "ingredient")}
-                  onChange={(e) =>
-                    handleIngredientChange(index, "name", e.target.value)
-                  }
-                  maxLength="50"
-                />
-                <label htmlFor={`ingredient-amount-${index}`}>
-                  {t("editRecipe.ingredientAmount")}
-                </label>
-                <input
-                  type="text"
-                  id={`ingredient-amount-${index}`}
-                  value={ingredient.quantity}
-                  onChange={(e) =>
-                    handleIngredientChange(index, "quantity", e.target.value)
-                  }
-                  maxLength="30"
-                  onBlur={(event) => {
-                    handleBlur(event, "quantity");
-                    setDisplayUnits(false);
-                  }}
-                  onFocus={() => setDisplayUnits(true)}
-                />
-                {amountErrors[index] && (
-                  <div className={styles.error}>{amountErrors[index]}</div>
-                )}
 
-                <label htmlFor={`ingredient-unit-${index}`}>
-                  {t("editRecipe.ingredientUnit")}
-                </label>
-                <select
-                  id={`ingredient-unit-${index}`}
-                  value={ingredient.unit}
-                  onChange={(e) =>
-                    handleIngredientChange(index, "unit", e.target.value)
-                  }
-                >
-                  {ingredient.unit === "" && (
-                    <option value="">
-                      {t("editRecipe.ingredients.unit.unitSelection")}
+          {ingredientGroups.map((group, groupIndex) => (
+            <div key={groupIndex}>
+              <input
+                type="text"
+                value={group.title}
+                onChange={(e) =>
+                  handleGroupTitleChange(groupIndex, e.target.value)
+                }
+                placeholder={t("editRecipe.groupTitlePlaceholder")}
+              />
+              {group.ingredients.map((ingredient, ingredientIndex) => (
+                <div key={ingredientIndex}>
+                  <input
+                    type="text"
+                    value={ingredient.name}
+                    onChange={(e) =>
+                      handleIngredientChange(
+                        groupIndex,
+                        ingredientIndex,
+                        "name",
+                        e.target.value
+                      )
+                    }
+                    placeholder={t("editRecipe.ingredientName")}
+                    maxLength="50"
+                  />
+                  <input
+                    type="text"
+                    value={ingredient.quantity}
+                    onChange={(e) =>
+                      handleIngredientChange(
+                        groupIndex,
+                        ingredientIndex,
+                        "quantity",
+                        e.target.value
+                      )
+                    }
+                    placeholder={t("editRecipe.ingredientAmount")}
+                    maxLength="30"
+                  />
+                  <select
+                    value={ingredient.unit}
+                    onChange={(e) =>
+                      handleIngredientChange(
+                        groupIndex,
+                        ingredientIndex,
+                        "unit",
+                        e.target.value
+                      )
+                    }
+                  >
+                    <option value="g">
+                      {t("editRecipe.ingredients.unit.g")}
                     </option>
-                  )}
-                  <option value="g">
-                    {t("editRecipe.ingredients.unit.g")}
-                  </option>
-                  <option value="kg">
-                    {t("editRecipe.ingredients.unit.kg")}
-                  </option>
-                  <option value="oz">
-                    {t("editRecipe.ingredients.unit.oz")}
-                  </option>
-                  <option value="lb">
-                    {t("editRecipe.ingredients.unit.lb")}
-                  </option>
-                  <option value="dl">
-                    {t("editRecipe.ingredients.unit.dl")}
-                  </option>
-                  <option value="ml">
-                    {t("editRecipe.ingredients.unit.ml")}
-                  </option>
-                  <option value="l">
-                    {t("editRecipe.ingredients.unit.l")}
-                  </option>
-                  <option value="tbsp">
-                    {t("editRecipe.ingredients.unit.tbsp")}
-                  </option>
-                  <option value="tsp">
-                    {t("editRecipe.ingredients.unit.tsp")}
-                  </option>
-                  <option value="cup">
-                    {t("editRecipe.ingredients.unit.cup")}
-                  </option>
-                  <option value="piece">
-                    {t("editRecipe.ingredients.unit.piece")}
-                  </option>
-                  <option value="clove">
-                    {t("editRecipe.ingredients.unit.clove")}
-                  </option>
-                  <option value="gallon">
-                    {t("editRecipe.ingredients.unit.gallon")}
-                  </option>
-                  <option value="fluidounce">
-                    {t("editRecipe.ingredients.unit.fluidounce")}
-                  </option>
-                  <option value="bunch">
-                    {t("editRecipe.ingredients.unit.bunch")}
-                  </option>
-                  <option value="can">
-                    {t("editRecipe.ingredients.unit.can")}
-                  </option>
-                </select>
-                {fieldErrors[index] && (
-                  <div className={styles.error}>{fieldErrors[index]}</div>
-                )}
+                    <option value="kg">
+                      {t("editRecipe.ingredients.unit.kg")}
+                    </option>
+                    <option value="oz">
+                      {t("editRecipe.ingredients.unit.oz")}
+                    </option>
+                    <option value="lb">
+                      {t("editRecipe.ingredients.unit.lb")}
+                    </option>
+                    <option value="dl">
+                      {t("editRecipe.ingredients.unit.dl")}
+                    </option>
+                    <option value="ml">
+                      {t("editRecipe.ingredients.unit.ml")}
+                    </option>
+                    <option value="l">
+                      {t("editRecipe.ingredients.unit.l")}
+                    </option>
+                    <option value="tbsp">
+                      {t("editRecipe.ingredients.unit.tbsp")}
+                    </option>
+                    <option value="tsp">
+                      {t("editRecipe.ingredients.unit.tsp")}
+                    </option>
+                    <option value="cup">
+                      {t("editRecipe.ingredients.unit.cup")}
+                    </option>
+                    <option value="piece">
+                      {t("editRecipe.ingredients.unit.piece")}
+                    </option>
+                    <option value="clove">
+                      {t("editRecipe.ingredients.unit.clove")}
+                    </option>
+                    <option value="gallon">
+                      {t("editRecipe.ingredients.unit.gallon")}
+                    </option>
+                    <option value="fluidounce">
+                      {t("editRecipe.ingredients.unit.fluidounce")}
+                    </option>
+                    <option value="bunch">
+                      {t("editRecipe.ingredients.unit.bunch")}
+                    </option>
+                    <option value="can">
+                      {t("editRecipe.ingredients.unit.can")}
+                    </option>
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      removeIngredient(groupIndex, ingredientIndex)
+                    }
+                  >
+                    {t("editRecipe.removeIngredient")}
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={() => addIngredient(groupIndex)}>
+                {t("editRecipe.addIngredient")}
+              </button>
+              {ingredientGroups.length > 1 && (
                 <button
                   type="button"
-                  className={styles.removeButton}
-                  onClick={() => removeIngredient(index)}
+                  onClick={() => removeIngredientGroup(groupIndex)}
                 >
-                  {t("editRecipe.removeIngredient")}
+                  {t("editRecipe.removeIngredientGroup")}
                 </button>
-              </div>
-            ))}
-          <div className={styles.error}>{fieldErrors.ingredients}</div>
-          <button
-            className={styles.addButton}
-            type="button"
-            onClick={addIngredient}
-          >
-            {t("editRecipe.addIngredient")}
+              )}
+            </div>
+          ))}
+          <button type="button" onClick={addIngredientGroup}>
+            {t("editRecipe.addIngredientGroup")}
           </button>
           <label htmlFor="instructions">{t("editRecipe.instructions")}</label>
           {instructions &&

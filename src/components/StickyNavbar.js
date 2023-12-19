@@ -14,6 +14,7 @@ import {
   faSignInAlt,
   faUserPlus,
   faBookMedical,
+  faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 const StickyNavBar = ({ isLoggedIn, onLogout }) => {
   const { t } = useTranslation();
@@ -70,6 +71,9 @@ const StickyNavBar = ({ isLoggedIn, onLogout }) => {
           </NavLink>
         </>
       )}
+      <NavLink to="/contact" activeClassName={styles.active}>
+        <FontAwesomeIcon icon={faQuestion} /> {t("navbar.contact")}
+      </NavLink>
     </nav>
   );
 };
