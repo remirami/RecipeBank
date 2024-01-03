@@ -172,15 +172,24 @@
   
   .instruction {
     display: contents;
+    align-items: center;
   }
   
   .instruction input[type="checkbox"] {
     margin-right: 0.5rem;
+    cursor: pointer;
+    width: 12px; 
+    height: 12px; 
   }
   
+  
   .instruction label {
-    cursor: pointer;
-  }
+    flex-grow: 1;
+    margin: 0; 
+    line-height: normal; 
+    position: relative;
+    top: -2px; 
+    }
   .creator {
     position: relative;
     bottom: 1rem;

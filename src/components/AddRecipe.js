@@ -73,7 +73,7 @@ const AddRecipe = () => {
       field === undefined ||
       (typeof field === "string" && field.trim() === "")
     ) {
-      return t("addRecipe.validation.fieldRequired");
+      return t("Field is required");
     }
     return "";
   }
@@ -563,7 +563,6 @@ const AddRecipe = () => {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             className={styles.formElement + " " + styles.textarea}
-            placeholder="(Optional)"
             maxLength="400"
           />
           {fieldErrors.description && (
@@ -647,7 +646,7 @@ const AddRecipe = () => {
             {foodSubTypes[type.mainType] && (
               <div>
                 {foodSubTypes[type.mainType].map((contains) => (
-                  <div key={contains}>
+                  <div className={styles.checkboxLabel} key={contains}>
                     <input
                       type="checkbox"
                       id={`foodSubType-${index}-${contains}`}
@@ -678,132 +677,149 @@ const AddRecipe = () => {
 
         <label className={styles.labelContainer}>
           {t("addRecipe.dietaryPreferences")}:
-          <div className={styles.formElement}>
-            <input
-              type="checkbox"
-              id="vegan"
-              name="dietaryPreference"
-              value="Vegan"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="vegan">{t("addRecipe.dietaryOptions.vegan")}</label>
-
-            <input
-              type="checkbox"
-              id="vegetarian"
-              name="dietaryPreference"
-              value="Vegetarian"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="vegetarian">
-              {t("addRecipe.dietaryOptions.vegetarian")}
-            </label>
-
-            <input
-              type="checkbox"
-              id="glutenFree"
-              name="dietaryPreference"
-              value="Gluten-free"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="glutenFree">
-              {t("addRecipe.dietaryOptions.glutenFree")}
-            </label>
-
-            <input
-              type="checkbox"
-              id="dairyFree"
-              name="dietaryPreference"
-              value="Dairy-free"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="dairyFree">
-              {t("addRecipe.dietaryOptions.dairyFree")}
-            </label>
-
-            <input
-              type="checkbox"
-              id="paleo"
-              name="dietaryPreference"
-              value="Paleo"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="paleo">{t("addRecipe.dietaryOptions.paleo")}</label>
-
-            <input
-              type="checkbox"
-              id="keto"
-              name="dietaryPreference"
-              value="Keto"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="keto">{t("addRecipe.dietaryOptions.keto")}</label>
-
-            <input
-              type="checkbox"
-              id="lowCarb"
-              name="dietaryPreference"
-              value="Low-carb"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lowCarb">
-              {t("addRecipe.dietaryOptions.lowCarb")}
-            </label>
-
-            <input
-              type="checkbox"
-              id="lowFat"
-              name="dietaryPreference"
-              value="Low-fat"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lowFat">
-              {t("addRecipe.dietaryOptions.lowFat")}
-            </label>
-
-            <input
-              type="checkbox"
-              id="lowSodium"
-              name="dietaryPreference"
-              value="Low-sodium"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lowSodium">
-              {t("addRecipe.dietaryOptions.lowSodium")}
-            </label>
-
-            <input
-              type="checkbox"
-              id="sugarFree"
-              name="dietaryPreference"
-              value="Sugar-free"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lowSugar">
-              {t("addRecipe.dietaryOptions.lowSugar")}
-            </label>
-
-            <input
-              type="checkbox"
-              id="lactoseIntolerant"
-              name="dietaryPreference"
-              value="Lactose-intolerant"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lactoseIntolerant">
-              {t("addRecipe.dietaryOptions.lactoseIntolerant")}
-            </label>
-
-            <input
-              type="checkbox"
-              id="eggFree"
-              name="dietaryPreference"
-              value="Egg-free"
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="eggFree">
-              {t("addRecipe.dietaryOptions.eggFree")}
-            </label>
+          <div className={`${styles.formElement} ${styles.checkboxGroup}`}>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="vegan"
+                name="dietaryPreference"
+                value="Vegan"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="vegan">
+                {t("addRecipe.dietaryOptions.vegan")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="vegetarian"
+                name="dietaryPreference"
+                value="Vegetarian"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="vegetarian">
+                {t("addRecipe.dietaryOptions.vegetarian")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="glutenFree"
+                name="dietaryPreference"
+                value="Gluten-free"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="glutenFree">
+                {t("addRecipe.dietaryOptions.glutenFree")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="dairyFree"
+                name="dietaryPreference"
+                value="Dairy-free"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="dairyFree">
+                {t("addRecipe.dietaryOptions.dairyFree")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="paleo"
+                name="dietaryPreference"
+                value="Paleo"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="paleo">
+                {t("addRecipe.dietaryOptions.paleo")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="keto"
+                name="dietaryPreference"
+                value="Keto"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="keto">{t("addRecipe.dietaryOptions.keto")}</label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="lowCarb"
+                name="dietaryPreference"
+                value="Low-carb"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="lowCarb">
+                {t("addRecipe.dietaryOptions.lowCarb")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="lowFat"
+                name="dietaryPreference"
+                value="Low-fat"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="lowFat">
+                {t("addRecipe.dietaryOptions.lowFat")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="lowSodium"
+                name="dietaryPreference"
+                value="Low-sodium"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="lowSodium">
+                {t("addRecipe.dietaryOptions.lowSodium")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="sugarFree"
+                name="dietaryPreference"
+                value="Sugar-free"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="sugarFree">
+                {t("addRecipe.dietaryOptions.sugarFree")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="lactoseIntolerant"
+                name="dietaryPreference"
+                value="Lactose-intolerant"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="lactoseIntolerant">
+                {t("addRecipe.dietaryOptions.lactoseIntolerant")}
+              </label>
+            </div>
+            <div className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                id="eggFree"
+                name="dietaryPreference"
+                value="Egg-free"
+                onChange={handleDietaryPreferencesChange}
+              />
+              <label htmlFor="eggFree">
+                {t("addRecipe.dietaryOptions.eggFree")}
+              </label>
+            </div>
           </div>
           {fieldErrors.dietaryPreference && (
             <div className={styles.error}>{fieldErrors.dietaryPreference}</div>
@@ -884,6 +900,7 @@ const AddRecipe = () => {
                 type="text"
                 placeholder="Optional"
                 value={ingredientGroup.title}
+                className={styles.ingredientStyle}
                 onChange={(event) =>
                   handleGroupTitleChange(groupIndex, event.target.value)
                 }
@@ -897,6 +914,7 @@ const AddRecipe = () => {
                   <input
                     type="text"
                     value={ingredient.name}
+                    className={styles.ingredientStyle}
                     onChange={(event) =>
                       handleIngredientChange(
                         groupIndex,
@@ -928,6 +946,7 @@ const AddRecipe = () => {
                   <input
                     type="text"
                     value={ingredient.quantity}
+                    className={styles.ingredientStyle}
                     onChange={(event) =>
                       handleIngredientChange(
                         groupIndex,
@@ -958,6 +977,7 @@ const AddRecipe = () => {
                 <select
                   id={`ingredient-unit-${index}`}
                   value={ingredient.unit}
+                  className={styles.ingredientStyle}
                   onChange={(e) =>
                     handleIngredientChange(
                       groupIndex,

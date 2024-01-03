@@ -106,7 +106,6 @@ const Search = () => {
           onChange={handleSearchInput}
           onKeyDown={handleSearchKeyDown}
         />
-
         <select
           className={styles.searchSelect}
           value={selectedCategoryType}
@@ -138,7 +137,6 @@ const Search = () => {
           <option value="Breakfast">{t("search.options.Breakfast")}</option>
           <option value="Side Dish">{t("search.options.Side Dish")}</option>
         </select>
-
         <select
           className={styles.searchSelect}
           value={foodType}
@@ -172,7 +170,6 @@ const Search = () => {
           </option>
           <option value="Sausage">{t("search.options.Sausage")}</option>
         </select>
-
         <select
           className={styles.searchSelect}
           value={subType}
@@ -187,167 +184,79 @@ const Search = () => {
               </option>
             ))}
         </select>
-        <label className={styles.labelContainer}>
-          {t("search.dietaryPreferences")}:
-          <div className={styles.formElement}>
+        <fieldset className={styles.dietaryPreferencesContainer}>
+          <legend className={styles.dietaryPreferencesLegend}>
+            {t("search.dietaryPreferences")}:
+          </legend>
+          {[
+            "Vegan",
+            "Vegetarian",
+            "glutenFree",
+            "dairyFree",
+            "Paleo",
+            "Keto",
+            "lowCarb",
+            "lowFat",
+            "lowSodium",
+            "sugarFree",
+            "Lactose-intolerant",
+            "Egg-free",
+          ].map((preference) => (
+            <div className={styles.preferenceItem} key={preference}>
+              <input
+                type="checkbox"
+                id={preference.toLowerCase().replace("-", "")}
+                name="dietaryPreference"
+                value={preference}
+                checked={dietaryPreferences.includes(preference)}
+                onChange={handleDietaryPreferencesChange}
+              />
+
+              <label htmlFor={preference.toLowerCase().replace("-", "")}>
+                {t(
+                  `search.dietaryOptions.${preference
+                    .toLowerCase()
+                    .replace("-", "")}`
+                )}
+              </label>
+            </div>
+          ))}
+        </fieldset>
+        <div className={styles.searchOptionsContainer}>
+          <div className={styles.optionContainer}>
             <input
               type="checkbox"
-              id="vegan"
-              name="dietaryPreference"
-              value="Vegan"
-              checked={dietaryPreferences.includes("Vegan")}
-              onChange={handleDietaryPreferencesChange}
+              checked={searchByUsername}
+              onChange={(e) => setSearchByUsername(e.target.checked)}
             />
-            <label htmlFor="vegan">{t("search.dietaryOptions.vegan")}</label>
-            <input
-              type="checkbox"
-              id="vegetarian"
-              name="dietaryPreference"
-              value="Vegetarian"
-              checked={dietaryPreferences.includes("Vegetarian")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="vegetarian">
-              {t("search.dietaryOptions.vegetarian")}
+            <label className={styles.textOptions}>
+              {t("search.searchByUsername")}
             </label>
-            <input
-              type="checkbox"
-              id="glutenFree"
-              name="dietaryPreference"
-              value="Gluten-free"
-              checked={dietaryPreferences.includes("Gluten-free")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="glutenFree">
-              {t("search.dietaryOptions.glutenFree")}
-            </label>
-            <input
-              type="checkbox"
-              id="dairyFree"
-              name="dietaryPreference"
-              value="Dairy-free"
-              checked={dietaryPreferences.includes("Dairy-free")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="dairyFree">
-              {t("search.dietaryOptions.dairyFree")}
-            </label>
-            <input
-              type="checkbox"
-              id="paleo"
-              name="dietaryPreference"
-              value="Paleo"
-              checked={dietaryPreferences.includes("Paleo")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="paleo">{t("search.dietaryOptions.paleo")}</label>
-            <input
-              type="checkbox"
-              id="keto"
-              name="dietaryPreference"
-              value="Keto"
-              checked={dietaryPreferences.includes("Keto")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="keto">{t("search.dietaryOptions.keto")}</label>
-            <input
-              type="checkbox"
-              id="lowCarb"
-              name="dietaryPreference"
-              value="Low-carb"
-              checked={dietaryPreferences.includes("Low-carb")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lowCarb">
-              {t("search.dietaryOptions.lowCarb")}
-            </label>
-            <input
-              type="checkbox"
-              id="lowFat"
-              name="dietaryPreference"
-              value="Low-fat"
-              checked={dietaryPreferences.includes("Low-fat")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lowFat">{t("search.dietaryOptions.lowFat")}</label>
-            <input
-              type="checkbox"
-              id="lowSodium"
-              name="dietaryPreference"
-              value="Low-sodium"
-              checked={dietaryPreferences.includes("Low-sodium")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lowSodium">
-              {t("search.dietaryOptions.lowSodium")}
-            </label>
-            <input
-              type="checkbox"
-              id="sugarFree"
-              name="dietaryPreference"
-              value="Sugar-free"
-              checked={dietaryPreferences.includes("Sugar-free")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="sugarFree">
-              {t("search.dietaryOptions.sugarFree")}
-            </label>
-            <input
-              type="checkbox"
-              id="lactoseIntolerant"
-              name="dietaryPreference"
-              value="Lactose-intolerant"
-              checked={dietaryPreferences.includes("Lactose-intolerant")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="lactoseIntolerant">
-              {t("search.dietaryOptions.lactoseIntolerant")}
-            </label>
-            <input
-              type="checkbox"
-              id="eggFree"
-              name="dietaryPreference"
-              value="Egg-free"
-              checked={dietaryPreferences.includes("Egg-free")}
-              onChange={handleDietaryPreferencesChange}
-            />
-            <label htmlFor="eggFree">
-              {t("search.dietaryOptions.eggFree")}
-            </label>{" "}
           </div>
-        </label>
-        <div className={styles.checkboxContainer}>
-          <div className={styles.checkboxContainer}>
+
+          <div className={styles.optionContainer}>
             <input
               type="checkbox"
               checked={searchByLikes}
               onChange={(e) => setSearchByLikes(e.target.checked)}
             />
-            <label>{t("search.include_liked")}</label>
+            <label className={styles.textOptions}>
+              {t("search.include_liked")}
+            </label>
           </div>
 
-          <div className={styles.sliderContainer}>
-            <div>
-              <label>
-                Maximum Cook Time: {maxCookTime} minutes
-                <input
-                  type="range"
-                  min="0"
-                  max="600"
-                  value={maxCookTime}
-                  onChange={handleMaxCookTimeChange}
-                />
-              </label>
-            </div>
+          <div className={styles.optionContainer}>
+            <label>
+              Maximum Cook Time: {maxCookTime} minutes
+              <input
+                type="range"
+                min="0"
+                max="600"
+                value={maxCookTime}
+                onChange={handleMaxCookTimeChange}
+              />
+            </label>
           </div>
-        </div>
-        <div className={styles.checkboxContainer}>
-          <input
-            type="checkbox"
-            checked={searchByUsername}
-            onChange={(e) => setSearchByUsername(e.target.checked)}
-          />
-          <label>{t("search.searchByUsername")}</label>
         </div>
         <button onClick={handleSearch} className={styles.searchButton}>
           {t("search.search_button")}

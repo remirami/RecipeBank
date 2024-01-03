@@ -44,6 +44,7 @@ const EditRecipe = () => {
     "Fruits & Berries": ["Fruit", "Berries"],
     "Marinades & Sauces": ["Marinade", "Sauce"],
     "Grains & Rice": ["Grain", "Rice"],
+    Sausage: ["Sausage"],
   };
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -323,36 +324,49 @@ const EditRecipe = () => {
     );
   };
 
+  const validations = {
+    ingredients: validateArrayField,
+    instructions: validateArrayField,
+    category: validateSelection,
+    foodType: validateSelection,
+    "foodCategory.mealType": validateFoodCategorySelection,
+    "foodCategory.type": validateFoodCategorySelection,
+    servingSize: validateServingSize,
+  };
+
+  function validateField(field, value) {
+    if (validations[field]) {
+      return validations[field](value);
+    }
+    if (value.trim() === "") {
+      return "This field cannot be empty.";
+    }
+    return "";
+  }
+
+  function validateArrayField(value) {
+    return !Array.isArray(value) || value.length === 0
+      ? "This field cannot be empty."
+      : "";
+  }
+
+  function validateSelection(value) {
+    return value.trim() === "" ? "Please select a value." : "";
+  }
+
+  function validateFoodCategorySelection(value) {
+    return value.trim() === "" ? "Please select a food category." : "";
+  }
+
+  function validateServingSize(value) {
+    return Number(value) <= 0 || Number(value) > 100
+      ? "Serving size must be a positive number and not exceed 100."
+      : "";
+  }
+
   const handleBlur = (event, field) => {
     const value = event.target.value;
-    let error = "";
-
-    if (field === "ingredients" || field === "instructions") {
-      if (!Array.isArray(value) || value.length === 0) {
-        error = "This field cannot be empty.";
-      }
-    } else if (value.trim() === "") {
-      if (field === "category" || field === "foodType") {
-        error = "Please select a value.";
-      } else if (
-        field === "foodCategory.mealType" ||
-        field === "foodCategory.type"
-      ) {
-        error = "Please select a food category.";
-      } else if (field !== "servingSize") {
-        error = "This field cannot be empty.";
-      }
-    } else if (
-      (field === "prepTime" || field === "cookTime") &&
-      (!Number.isInteger(Number(value)) || Number(value) <= 0)
-    ) {
-      error = "This field requires a positive integer value.";
-    } else if (
-      field === "servingSize" &&
-      (Number(value) <= 0 || Number(value) > 100)
-    ) {
-      error = "Serving size must be a positive number and not exceed 100.";
-    }
+    const error = validateField(field, value);
 
     if (field.startsWith("foodCategory.")) {
       const subField = field.split(".")[1];
@@ -458,6 +472,7 @@ const EditRecipe = () => {
           <div className={styles.error}>{fieldErrors.name}</div>
           <label htmlFor="description">{t("editRecipe.description")}</label>
           <input
+            className={styles.inputField}
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -466,6 +481,7 @@ const EditRecipe = () => {
           />
           <label htmlFor="prepTime">{t("editRecipe.prepTime")}</label>
           <input
+            className={styles.inputField}
             type="number"
             id="prepTime"
             value={prepTime}
@@ -477,6 +493,7 @@ const EditRecipe = () => {
           )}
           <label htmlFor="cookTime">{t("editRecipe.cookTime")}</label>
           <input
+            className={styles.inputField}
             type="number"
             id="cookTime"
             value={cookTime}
@@ -492,7 +509,7 @@ const EditRecipe = () => {
               type="number"
               value={servingSize}
               onChange={(event) => setServingSize(event.target.value)}
-              className={styles.formElement}
+              className={styles.inputField}
               placeholder="(Optional)"
               max="50"
             />
@@ -553,10 +570,10 @@ const EditRecipe = () => {
           {fieldErrors.foodType && (
             <div className={styles.error}>{fieldErrors.foodType}</div>
           )}
-          <label className={styles.labelContainer}>
-            {t("editRecipe.dietaryPreferences")}:
+          <div className={styles.labelContainer}>
+            <span>{t("editRecipe.dietaryPreferences")}:</span>
             <div className={styles.dietaryPreferencesSelect}>
-              <label>
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="vegan"
@@ -568,7 +585,9 @@ const EditRecipe = () => {
                 <label htmlFor="vegan">
                   {t("addRecipe.dietaryOptions.vegan")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="vegetarian"
@@ -580,7 +599,9 @@ const EditRecipe = () => {
                 <label htmlFor="vegetarian">
                   {t("addRecipe.dietaryOptions.vegetarian")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="glutenFree"
@@ -592,7 +613,9 @@ const EditRecipe = () => {
                 <label htmlFor="glutenFree">
                   {t("addRecipe.dietaryOptions.glutenFree")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="dairyFree"
@@ -604,7 +627,9 @@ const EditRecipe = () => {
                 <label htmlFor="dairyFree">
                   {t("addRecipe.dietaryOptions.dairyFree")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="paleo"
@@ -616,7 +641,9 @@ const EditRecipe = () => {
                 <label htmlFor="paleo">
                   {t("addRecipe.dietaryOptions.paleo")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="keto"
@@ -628,7 +655,9 @@ const EditRecipe = () => {
                 <label htmlFor="keto">
                   {t("addRecipe.dietaryOptions.keto")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="lowCarb"
@@ -640,7 +669,9 @@ const EditRecipe = () => {
                 <label htmlFor="lowCarb">
                   {t("addRecipe.dietaryOptions.lowCarb")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="lowFat"
@@ -652,7 +683,9 @@ const EditRecipe = () => {
                 <label htmlFor="lowFat">
                   {t("addRecipe.dietaryOptions.lowFat")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="lowSodium"
@@ -664,7 +697,9 @@ const EditRecipe = () => {
                 <label htmlFor="lowSodium">
                   {t("addRecipe.dietaryOptions.lowSodium")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="sugarFree"
@@ -673,10 +708,12 @@ const EditRecipe = () => {
                   checked={dietaryPreference.includes("Sugar-free")}
                   onChange={handleDietaryPreferencesChange}
                 />
-                <label htmlFor="lowSugar">
-                  {t("addRecipe.dietaryOptions.lowSugar")}
+                <label htmlFor="sugarFree">
+                  {t("addRecipe.dietaryOptions.sugarFree")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="lactoseIntolerant"
@@ -688,7 +725,9 @@ const EditRecipe = () => {
                 <label htmlFor="lactoseIntolerant">
                   {t("addRecipe.dietaryOptions.lactoseIntolerant")}
                 </label>
+              </div>
 
+              <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
                   id="eggFree"
@@ -700,15 +739,15 @@ const EditRecipe = () => {
                 <label htmlFor="eggFree">
                   {t("addRecipe.dietaryOptions.eggFree")}
                 </label>
-              </label>
+              </div>
             </div>
             {fieldErrors.dietaryPreference && (
               <div className={styles.error}>
                 {fieldErrors.dietaryPreference}
               </div>
             )}
-          </label>
-          <label htmlFor="ingredients">{t("editRecipe.ingredient")}</label>
+          </div>
+
           <label className={styles.labelContainer}>
             {t("editRecipe.mealType")}:
             <select
@@ -790,7 +829,7 @@ const EditRecipe = () => {
           </label>
 
           {ingredientGroups.map((group, groupIndex) => (
-            <div key={groupIndex}>
+            <div key={groupIndex} className={styles.groupContainer}>
               <input
                 type="text"
                 value={group.title}
@@ -798,9 +837,13 @@ const EditRecipe = () => {
                   handleGroupTitleChange(groupIndex, e.target.value)
                 }
                 placeholder={t("editRecipe.groupTitlePlaceholder")}
+                className={styles.inputField}
               />
               {group.ingredients.map((ingredient, ingredientIndex) => (
-                <div key={ingredientIndex}>
+                <div
+                  key={ingredientIndex}
+                  className={styles.ingredientContainer}
+                >
                   <input
                     type="text"
                     value={ingredient.name}
@@ -814,6 +857,7 @@ const EditRecipe = () => {
                     }
                     placeholder={t("editRecipe.ingredientName")}
                     maxLength="50"
+                    className={styles.inputField}
                   />
                   <input
                     type="text"
@@ -828,6 +872,7 @@ const EditRecipe = () => {
                     }
                     placeholder={t("editRecipe.ingredientAmount")}
                     maxLength="30"
+                    className={styles.inputField}
                   />
                   <select
                     value={ingredient.unit}
@@ -839,6 +884,7 @@ const EditRecipe = () => {
                         e.target.value
                       )
                     }
+                    className={styles.selectField}
                   >
                     <option value="g">
                       {t("editRecipe.ingredients.unit.g")}
@@ -894,25 +940,35 @@ const EditRecipe = () => {
                     onClick={() =>
                       removeIngredient(groupIndex, ingredientIndex)
                     }
+                    className={`${styles.button} ${styles.removeButton}`}
                   >
                     {t("editRecipe.removeIngredient")}
                   </button>
                 </div>
               ))}
-              <button type="button" onClick={() => addIngredient(groupIndex)}>
+              <button
+                type="button"
+                onClick={() => addIngredient(groupIndex)}
+                className={`${styles.button} ${styles.removeButton}`}
+              >
                 {t("editRecipe.addIngredient")}
               </button>
               {ingredientGroups.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeIngredientGroup(groupIndex)}
+                  className={`${styles.button} ${styles.removeButton}`}
                 >
                   {t("editRecipe.removeIngredientGroup")}
                 </button>
               )}
             </div>
           ))}
-          <button type="button" onClick={addIngredientGroup}>
+          <button
+            type="button"
+            onClick={addIngredientGroup}
+            className={`${styles.button} ${styles.removeButton}`}
+          >
             {t("editRecipe.addIngredientGroup")}
           </button>
           <label htmlFor="instructions">{t("editRecipe.instructions")}</label>
@@ -932,6 +988,7 @@ const EditRecipe = () => {
                     updatedInstructions[index] = e.target.value;
                     setInstructions(updatedInstructions);
                   }}
+                  className={`${styles.button}`}
                 />
                 <button
                   type="button"

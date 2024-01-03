@@ -6,7 +6,7 @@
   margin-top: 150px;
   padding: 1rem;
   font-family: 'Quicksand', sans-serif;
-
+  font-size: medium;
 }
 
 .formWrapper {
@@ -15,11 +15,16 @@
   align-items: center;
 }
 
-input {
+.inputGroup {
   width: 100%;
+  max-width: 600px;
+  padding: 0.5rem;
+  border: 1px solid #000000;
+  border-radius: 4px;
   box-sizing: border-box;
+  font-family: 'Quicksand';
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); 
 }
-
 .formGroup {
   display: flex;
   flex-direction: column;

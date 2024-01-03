@@ -303,16 +303,16 @@
         "dietaryOptions": {
           "vegan": "Vegaani",
           "vegetarian": "Kasvissyöjä",
-          "glutenFree": "Gluteeniton",
-          "dairyFree": "Maidoton",
+          "glutenfree": "Gluteeniton",
+          "dairyfree": "Maidoton",
           "paleo": "Paleo",
           "keto": "Keto",
-          "lowCarb": "Vähähiilihydraattinen",
-          "lowFat": "Vähärasvainen",
-          "lowSodium": "Vähäsuolainen",
-          "sugarFree": "Sokeriton",
-          "lactoseIntolerant": "Laktoosi-intolerantti",
-          "eggFree": "Kananmunaton"
+          "lowcarb": "Vähähiilihydraattinen",
+          "lowfat": "Vähärasvainen",
+          "lowsodium": "Vähäsuolainen",
+          "sugarfree": "Sokeriton",
+          "lactoseintolerant": "Laktoosi-intolerantti",
+          "eggfree": "Kananmunaton"
         }
       },  "recipeList": {
         "title": "Reseptit",

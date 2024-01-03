@@ -32,9 +32,9 @@
   max-width: 600px;
   border-radius: 15px;
   padding: 15px;
-  border: 1px solid #000000; 
   font-family: 'Quicksand';
-
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); 
+  background-color: #ffffff;
 }
 
 .formContainer::before {
@@ -44,17 +44,13 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-image: url("C:\recipebank\src\assets\dill.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
   opacity: 0.4;
   z-index: -1;
 }
 
 
-input {
-  width: 100%;
+.input {
+  width: 97%;
   max-width: 600px;
   padding: 0.5rem;
   border: 1px solid #000000;
@@ -63,7 +59,15 @@ input {
   font-family: 'Quicksand';
 
 }
-
+.ingredientStyle{
+  width: 100%;
+  max-width: 600px;
+  padding: 0.5rem;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: 'Quicksand';
+}
 .submitButton {
   background-color: #ffffff;
   border: 2px solid #000000;
@@ -84,7 +88,7 @@ input {
 }
 .formElement {
   display: block;
-  width: 100%;
+  width: 97%;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
   font-family: 'Quicksand';
@@ -107,7 +111,26 @@ input {
 
 .labelContainer {
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 }
+.checkboxGroup {
+  padding: 0; 
+  margin-bottom: 0; 
+}
+.checkboxLabel input[type="checkbox"] {
+  width: auto; 
+  margin: 0; 
+  padding: 0; 
+  vertical-align: middle; 
+  margin-right: 10px;
+}
+.checkboxLabel {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px; 
+}
+
 
 .categorySelect {
   display: block;
@@ -118,12 +141,12 @@ input {
   box-sizing: border-box;
   font-family: 'Quicksand';
   border: 2px solid #000000;
+  font-family: 'Quicksand';
 
 
 }
 .addButton, .removeButton {
   background-color: rgb(255, 255, 255);
-  border: 2px solid #000000;
   color: rgb(0, 0, 0);
   text-align: center;
   text-decoration: none;
@@ -131,7 +154,7 @@ input {
   font-size: 1rem;
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 4px;
+  font-family: 'Quicksand';
   padding: 0.5rem 1rem;
 }
 .addButton:hover{

@@ -65,6 +65,7 @@ const Register = () => {
         <div className={styles.formGroup}>
           <label htmlFor="username">{t("register.username")}:</label>
           <input
+            className={styles.inputGroup}
             type="text"
             id="username"
             value={username}
@@ -75,6 +76,7 @@ const Register = () => {
         <div className={styles.formGroup}>
           <label htmlFor="email">{t("register.email")}:</label>
           <input
+            className={styles.inputGroup}
             type="email"
             id="email"
             value={email}
@@ -85,6 +87,7 @@ const Register = () => {
         <div className={styles.formGroup}>
           <label htmlFor="password">{t("register.password")}:</label>
           <input
+            className={styles.inputGroup}
             type="password"
             id="password"
             value={password}
@@ -98,6 +101,7 @@ const Register = () => {
             {t("register.confirm_password")}:
           </label>
           <input
+            className={styles.inputGroup}
             type="password"
             id="confirmPassword"
             value={confirmPassword}

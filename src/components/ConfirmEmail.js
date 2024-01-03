@@ -17,7 +17,6 @@ const ConfirmEmail = () => {
 
       if (data.message) {
         setMessage(data.message);
-        console.log("Setting message:", data.message); // Add this line
       } else {
         setMessage("An error occurred while confirming your email.");
       }

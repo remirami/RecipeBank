@@ -16,11 +16,14 @@ const OpenBook = ({
   const [tooltipLikeVisible, setTooltipLikeVisible] = useState(false);
   const [tooltipDislikeVisible, setTooltipDislikeVisible] = useState(false);
 
-  const handleIngredientCheckboxChange = (index) => {
-    if (checkedIngredients.includes(index)) {
-      setCheckedIngredients(checkedIngredients.filter((i) => i !== index));
+  const handleIngredientCheckboxChange = (groupIndex, ingredientIndex) => {
+    const compoundKey = `${groupIndex}-${ingredientIndex}`;
+    if (checkedIngredients.includes(compoundKey)) {
+      setCheckedIngredients(
+        checkedIngredients.filter((key) => key !== compoundKey)
+      );
     } else {
-      setCheckedIngredients([...checkedIngredients, index]);
+      setCheckedIngredients([...checkedIngredients, compoundKey]);
     }
   };
 
@@ -31,9 +34,6 @@ const OpenBook = ({
       setCheckedInstructions([...checkedInstructions, index]);
     }
   };
-  console.log("isLoggedIn value:", isLoggedIn);
-  console.log("userId from local storage:", localStorage.getItem("userId"));
-  console.log("recipe.user_id:", recipe.user_id);
 
   const isOwner =
     isLoggedIn &&
@@ -45,13 +45,6 @@ const OpenBook = ({
     recipe.user_id && recipe.user_id.username
       ? recipe.user_id.username
       : "Unknown";
-  console.log(isOwner);
-  console.log("Food Type:", recipe.foodType);
-  console.log("Type of Food Type:", typeof recipe.foodType);
-
-  console.log("Dietary Preference:", recipe.dietaryPreference);
-  console.log("Type of Dietary Preference:", typeof recipe.dietaryPreference);
-  console.log("Ingredients:", recipe.ingredients);
 
   const getFoodTypeString = (foodTypeArray) => {
     if (!foodTypeArray || !Array.isArray(foodTypeArray)) return ""; // If foodTypeArray is null or undefined or not an array
@@ -69,8 +62,6 @@ const OpenBook = ({
       })
       .join(", ");
   };
-  console.log("Recipe", recipe);
-  console.log("Recipe ingredients", recipe.ingredients);
   return (
     <div className={styles.bookContainer}>
       <div className={styles.openBook}>
@@ -118,35 +109,40 @@ const OpenBook = ({
             {recipe.ingredientGroups && recipe.ingredientGroups.length > 0 ? (
               recipe.ingredientGroups.map((group, groupIndex) => (
                 <li key={`group-${groupIndex}`}>
-                  {group.title && <h4>{group.title}</h4>}{" "}
-                  {group.ingredients.map((ingredient, ingredientIndex) => (
-                    <div
-                      key={`ingredient-${groupIndex}-${ingredientIndex}`}
-                      className={styles.ingredient}
-                    >
-                      <label
-                        htmlFor={`ingredient-${groupIndex}-${ingredientIndex}`}
-                        className={
-                          checkedIngredients.includes(ingredientIndex)
-                            ? styles.checkedIngredient
-                            : ""
-                        }
+                  {group.title && <h4>{group.title}</h4>}
+                  {group.ingredients.map((ingredient, ingredientIndex) => {
+                    const compoundKey = `${groupIndex}-${ingredientIndex}`;
+                    return (
+                      <div
+                        key={`ingredient-${groupIndex}-${ingredientIndex}`}
+                        className={styles.ingredient}
                       >
-                        {ingredient.name} - {ingredient.quantity}{" "}
-                        {t(`openBook.units.${ingredient.unit}`)}
-                      </label>
-                      <input
-                        type="checkbox"
-                        id={`ingredient-${groupIndex}-${ingredientIndex}`}
-                        onChange={() =>
-                          handleIngredientCheckboxChange(
-                            groupIndex,
-                            ingredientIndex
-                          )
-                        }
-                      />
-                    </div>
-                  ))}
+                        <label
+                          htmlFor={`ingredient-${groupIndex}-${ingredientIndex}`}
+                          className={
+                            checkedIngredients.includes(compoundKey)
+                              ? styles.checkedIngredient
+                              : ""
+                          }
+                        >
+                          {ingredient.name} - {ingredient.quantity}{" "}
+                          <strong>
+                            {t(`openBook.units.${ingredient.unit}`)}
+                          </strong>
+                        </label>
+                        <input
+                          type="checkbox"
+                          id={`ingredient-${groupIndex}-${ingredientIndex}`}
+                          onChange={() =>
+                            handleIngredientCheckboxChange(
+                              groupIndex,
+                              ingredientIndex
+                            )
+                          }
+                        />
+                      </div>
+                    );
+                  })}
                 </li>
               ))
             ) : (

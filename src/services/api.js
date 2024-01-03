@@ -169,8 +169,7 @@ export async function searchRecipes(
         maxCookTime,
       },
     });
-    console.log("Server response: ", response);
-    console.log("Max cook time:", maxCookTime);
+
     return response.data;
   } catch (error) {
     console.error("Error in searchRecipes function: ", error);
